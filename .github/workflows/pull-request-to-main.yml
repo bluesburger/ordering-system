@@ -38,3 +38,4 @@ jobs:
             git checkout pr-develop-to-main
             git pull origin main
             git push origin pr-develop-to-main
+          fi
