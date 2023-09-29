@@ -22,7 +22,7 @@ jobs:
       - name: Extrair dados do commit
         uses: rlespinasse/git-commit-data-action@v1.x
 
-      - name: Verificar se ja existe um PR criado
+      - name: Verificar se já existe um PR criado
         run: |
           PR_IDENTIFIER="enhancement"
           PR_NUMBER=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -45,6 +45,6 @@ jobs:
               branch: pr-develop-to-main
               delete-branch: true
           else
-            git checkout nova-branch
+            git checkout pr-develop-to-main
             git pull origin main
-            git push origin nova-branch
+            git push origin pr-develop-to-main
