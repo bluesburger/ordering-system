@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Verificar alterações
         uses: actions/checkout@v2
+        with:
+          ref: main
 
       - name: Extrair dados do commit
         uses: rlespinasse/git-commit-data-action@v1.x
@@ -25,5 +27,6 @@ jobs:
           author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
           title: 'PR aberto automaticamente de Develop para Main'
           body: 'Este PR foi criado automaticamente.'
-          branch: pr-develop-to-main
-          base: main
+          base: develop
+          signoff: false
+          draft: false
