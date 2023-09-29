@@ -1,0 +1,23 @@
+name: open-pr-to-main
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  open-pr-to-main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verificar alterações
+        uses: actions/checkout@v2
+
+      - name: Abrir Pull Request
+        id: pr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: 'PR aberto automaticamente de Develop para Main'
+          body: 'Este PR foi criado automaticamente.'
+          branch: main
