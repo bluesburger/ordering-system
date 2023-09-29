@@ -8,7 +8,7 @@
 		<version>3.0.12-SNAPSHOT</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.bluesburger</groupId>
+	<groupId>br.com.bluesburger</groupId>
 	<artifactId>orderingsystem</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>orderingsystem</name>
@@ -101,5 +101,4 @@
 			</releases>
 		</pluginRepository>
 	</pluginRepositories>
-
 </project>
