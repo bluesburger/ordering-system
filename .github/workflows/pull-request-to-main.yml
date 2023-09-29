@@ -35,12 +35,12 @@ jobs:
           if [ -z "$PR_NUMBER" ]; then
             uses: peter-evans/create-pull-request@v5
             with:
-              token: ${{ secrets.GITHUB_TOKEN }}
               committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
               author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
               title: 'PR aberto automaticamente de Develop para Main'
               body: 'Este PR foi criado automaticamente.'
               labels: enhancement
+              token: ${{ secrets.GITHUB_TOKEN }}
               branch: pr-develop-to-main
               delete-branch: true
           else
