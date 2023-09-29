@@ -25,5 +25,5 @@ jobs:
           author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
           title: 'PR aberto automaticamente de Develop para Main'
           body: 'Este PR foi criado automaticamente.'
-          base: develop
-          branch: main
+          base: main
+          branch: develop
