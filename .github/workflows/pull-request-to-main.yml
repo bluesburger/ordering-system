@@ -31,16 +31,13 @@ jobs:
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
 
       - name: Abrir ou Atualizar Pull Request
-        run: |
-          if [ -z "$PR_NUMBER" ]; then
-            npx create-pull-request \
-              --title "PR aberto automaticamente de Develop para Main" \
-              --body "Este PR foi criado automaticamente." \
-              --labels enhancement \
-              --base main \
-              --head develop
-          else
-            git checkout -b pr-develop-to-main
-            git pull origin main
-            git push origin pr-develop-to-main
-          fi
+        uses: gr2m/create-or-update-pull-request-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+#            committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+          author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+          title: 'PR aberto automaticamente de Develop para Main'
+          body: 'Este PR foi criado automaticamente.'
+          labels: enhancement
+          branch: develop
