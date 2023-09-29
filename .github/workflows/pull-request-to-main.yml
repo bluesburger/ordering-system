@@ -13,20 +13,38 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: main
+
       - name: Get latest changes
         run: |
           git fetch origin develop:develop
           git reset --hard develop
+
       - name: Extrair dados do commit
         uses: rlespinasse/git-commit-data-action@v1.x
-      - name: Abrir Pull Request
-        id: pr
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
-          author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
-          title: 'PR aberto automaticamente de Develop para Main'
-          body: 'Este PR foi criado automaticamente.'
-          branch: pr-develop-to-main
-          delete-branch: true
+
+      - name: Verificar se ja existe um PR criado
+        run: |
+          PR_IDENTIFIER="enhancement"
+          PR_NUMBER=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/bluesburger/ordering-system/pulls?q=is:open+label:$PR_IDENTIFIER" | jq -r '.[0].number')
+
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+
+      - name: Abrir ou Atualizar Pull Request
+        run: |
+          if [ -z "$PR_NUMBER" ]; then
+
+            uses: peter-evans/create-pull-request@v5
+            with:
+              token: ${{ secrets.GITHUB_TOKEN }}
+              committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+              author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+              title: 'PR aberto automaticamente de Develop para Main'
+              body: 'Este PR foi criado automaticamente.'
+              labels: enhancement
+              branch: pr-develop-to-main
+              delete-branch: true
+          else
+            git checkout nova-branch
+            git pull origin main
+            git push origin nova-branch
