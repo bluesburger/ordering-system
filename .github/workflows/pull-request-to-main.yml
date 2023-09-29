@@ -1,0 +1,37 @@
+name: open-pr-to-main
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  open-pr-to-main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verificar alterações
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Get latest changes
+        run: |
+          git fetch origin develop:develop
+          git reset --hard develop
+
+      - name: Extrair dados do commit
+        uses: rlespinasse/git-commit-data-action@v1.x
+
+      - name: Abrir Pull Request
+        id: pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+          author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+          title: 'PR aberto automaticamente de Develop para Main'
+          body: 'Este PR foi criado automaticamente.'
+          base: develop
+          signoff: false
+          draft: false
