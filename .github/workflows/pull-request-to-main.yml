@@ -8,21 +8,17 @@ on:
 jobs:
   open-pr-to-main:
     runs-on: ubuntu-latest
-
     steps:
       - name: Verificar alterações
         uses: actions/checkout@v2
         with:
           ref: main
-
       - name: Get latest changes
         run: |
           git fetch origin develop:develop
           git reset --hard develop
-
       - name: Extrair dados do commit
         uses: rlespinasse/git-commit-data-action@v1.x
-
       - name: Abrir Pull Request
         id: pr
         uses: peter-evans/create-pull-request@v5
