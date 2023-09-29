@@ -13,7 +13,7 @@ jobs:
       - name: Verificar alterações
         uses: actions/checkout@v2
 
-      - name: extract commit data
+      - name: Extrair dados do commit
         uses: rlespinasse/git-commit-data-action@v1.x
 
       - name: Abrir Pull Request
@@ -26,4 +26,4 @@ jobs:
           title: 'PR aberto automaticamente de Develop para Main'
           body: 'Este PR foi criado automaticamente.'
           base: main
-          branch: develop
+          branch: "release"
