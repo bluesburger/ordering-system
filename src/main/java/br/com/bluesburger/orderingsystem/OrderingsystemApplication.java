@@ -1,4 +1,4 @@
-package com.bluesburger.orderingsystem;
+package br.com.bluesburger.orderingsystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
