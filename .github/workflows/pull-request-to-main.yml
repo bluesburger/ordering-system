@@ -33,7 +33,6 @@ jobs:
       - name: Abrir ou Atualizar Pull Request
         run: |
           if [ -z "$PR_NUMBER" ]; then
-
             uses: peter-evans/create-pull-request@v5
             with:
               token: ${{ secrets.GITHUB_TOKEN }}
