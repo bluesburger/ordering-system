@@ -1,4 +1,4 @@
-# Nome do projeto
+### FIAP - **TechChallenge** - FASE 1 :rocket: 
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/iuricode/README-template?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/iuricode/README-template?style=for-the-badge)
@@ -68,3 +68,6 @@ Como alternativa, consulte a documentação do GitHub em [como criar uma solicit
 ## 📝 Licença
 
 Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
+
+## Autores
+Made with by  [Fernando Marques](https://www.linkedin.com/in/fernando-pozo-marques-junior/), [Marlon Silva](https://www.linkedin.com/in/marlon-silva-43075a184/),[Leandro Araújo](https://www.linkedin.com/in/leandroaraujo-sp)
