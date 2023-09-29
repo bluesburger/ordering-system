@@ -8,6 +8,7 @@ on:
 jobs:
   open-pr-to-main:
     runs-on: ubuntu-latest
+
     steps:
       - name: Verificar alterações
         uses: actions/checkout@v2
@@ -22,22 +23,14 @@ jobs:
       - name: Extrair dados do commit
         uses: rlespinasse/git-commit-data-action@v1.x
 
-      - name: Verificar se já existe um PR criado
-        run: |
-          PR_IDENTIFIER="enhancement"
-          PR_NUMBER=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/bluesburger/ordering-system/pulls?q=is:open+label:$PR_IDENTIFIER" | jq -r '.[0].number')
-
-          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-
-      - name: Abrir ou Atualizar Pull Request
-        uses: gr2m/create-or-update-pull-request-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Abrir Pull Request
+        id: pr
+        uses: peter-evans/create-pull-request@v5
         with:
-#            committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
+          token: ${{ secrets.GITHUB_TOKEN }}
+          committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
           author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
           title: 'PR aberto automaticamente de Develop para Main'
           body: 'Este PR foi criado automaticamente.'
-          labels: enhancement
-          branch: develop
+          branch: pr-develop-to-main
+          delete-branch: true
