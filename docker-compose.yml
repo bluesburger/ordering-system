@@ -1,0 +1,41 @@
+version: '3.1'
+
+services:
+  dbmysql:
+    image: mysql:8.0
+    networks:
+      - spring-boot-mysql-network
+    container_name: bdbluesburger
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: dbbluesburger
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    expose:
+      - 3306
+      - 33060
+  aplication:
+    build:
+      context: .
+    image: openjdk:11
+    container_name: application-java
+    volumes:
+      - ./target:/app/application-java
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-boot-mysql-network
+    depends_on:
+      - dbmysql
+    command: ["java", "-jar", "/app/application-java/application.jar"]
+networks:
+  spring-boot-mysql-network:
+    driver: bridge
+volumes:
+  db_data:
+  target:
+
+
