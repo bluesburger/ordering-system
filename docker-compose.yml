@@ -1,10 +1,8 @@
-version: '3.1'
+version: '3.8'
 
 services:
   dbmysql:
     image: mysql:8.0
-    networks:
-      - spring-boot-mysql-network
     container_name: bdbluesburger
     volumes:
       - db_data:/var/lib/mysql
@@ -17,25 +15,31 @@ services:
     expose:
       - 3306
       - 33060
-  aplication:
-    build:
-      context: .
-    image: openjdk:11
-    container_name: application-java
-    volumes:
-      - ./target:/app/application-java
-    ports:
-      - "8080:8080"
     networks:
       - spring-boot-mysql-network
-    depends_on:
-      - dbmysql
-    command: ["java", "-jar", "/app/application-java/application.jar"]
+  #aplication:
+  #  build:
+  #    context: .
+  #  image: amazoncorretto:11-al2023-jdk
+  #  container_name: application-java
+  #  ports:
+  #    - "8080:8080"
+  #  networks:
+  #    - spring-boot-mysql-network
+  #  depends_on:
+  #    - dbmysql
+  #  environment:
+  #    - SPRING_PROFILES_ACTIVE=dev
+  #    - SPRING_DATASOURCE_URL=mysql://dbmysql:3306/dbmysql
+  #    - SPRING_DATASOURCE_USERNAME=admin
+  #    - SPRING_DATASOURCE_PASSWORD=admin
+  #  volumes:
+  #    - C:\\Users\\55119\\Desktop\\orderingsystem\\.mvn\\wrapper\\maven-wrapper.jar:/path/in/container/maven-wrapper.jar
+  #  command: [ "java", "-Dspring.profiles.active=docker-demo", "-jar", "maven-wrapper.jar" ]
 networks:
   spring-boot-mysql-network:
     driver: bridge
 volumes:
   db_data:
-  target:
 
 
