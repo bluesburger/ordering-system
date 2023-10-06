@@ -31,7 +31,7 @@ services:
       - dbmysql
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_DATASOURCE_URL=mysql://dbmysql:3306/dbmysql
+      - SPRING_DATASOURCE_URL=jdbc:mysql://dbmysql:3306/dbbluesburger
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
     volumes:
@@ -43,5 +43,3 @@ networks:
 volumes:
   db_data:
   db_app:
-
-
