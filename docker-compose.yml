@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   dbmysql:
     image: mysql:8.0
@@ -17,29 +16,32 @@ services:
       - 33060
     networks:
       - spring-boot-mysql-network
-  #aplication:
-  #  build:
-  #    context: .
-  #  image: amazoncorretto:11-al2023-jdk
-  #  container_name: application-java
-  #  ports:
-  #    - "8080:8080"
-  #  networks:
-  #    - spring-boot-mysql-network
-  #  depends_on:
-  #    - dbmysql
-  #  environment:
-  #    - SPRING_PROFILES_ACTIVE=dev
-  #    - SPRING_DATASOURCE_URL=mysql://dbmysql:3306/dbmysql
-  #    - SPRING_DATASOURCE_USERNAME=admin
-  #    - SPRING_DATASOURCE_PASSWORD=admin
-  #  volumes:
-  #    - C:\\Users\\55119\\Desktop\\orderingsystem\\.mvn\\wrapper\\maven-wrapper.jar:/path/in/container/maven-wrapper.jar
-  #  command: [ "java", "-Dspring.profiles.active=docker-demo", "-jar", "maven-wrapper.jar" ]
+  
+  application:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: amazoncorretto:11-al2023-jdk
+    container_name: application-java
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-boot-mysql-network
+    depends_on:
+      - dbmysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:mysql://dbmysql:3306/dbbluesburger
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+    volumes:
+      - db_app:/var/lib/app
+    command: [ "java", "-jar", "/var/lib/app/orderingsystem-0.0.1-SNAPSHOT.jar" ]
+
 networks:
   spring-boot-mysql-network:
     driver: bridge
+
 volumes:
   db_data:
-
-
+  db_app:
