@@ -1,4 +1,4 @@
-package br.com.bluesburger.orderingsystem.adapters.in;
+package br.com.bluesburger.orderingsystem.adapters.in.dessert;
 
 import java.util.List;
 

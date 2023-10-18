@@ -1,5 +1,7 @@
 package br.com.bluesburger.orderingsystem.core.domain;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -10,16 +12,23 @@ import javax.persistence.Id;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Entity(name = "drink")
+@Entity(name = "drinks")
+@Getter
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Drink {
+@AllArgsConstructor
+public class Drink implements Serializable {
+
+	private static final long serialVersionUID = 3817656862317795723L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +42,13 @@ public class Drink {
 	
 	@NonNull
 	private String name;
+
+	@Setter
+	private BigDecimal price;
+
+    public void applyFivePercentDiscount() {
+        BigDecimal discount = price.multiply(BigDecimal.valueOf(0.05));
+        price = price.subtract(discount);
+    }
+
 }

@@ -1,7 +1,9 @@
-package br.com.bluesburger.orderingsystem.adapters.in;
+package br.com.bluesburger.orderingsystem.adapters.in.order;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.OrderRequest;
 import br.com.bluesburger.orderingsystem.adapters.out.OrderAdapter;
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DessertNotFoundException;
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DishNotFoundException;
@@ -46,7 +49,6 @@ public class OrderController {
 	@Autowired
 	private OrderMapper orderMapper;
 
-	
 	@GetMapping("/{orderId}")
 	@ResponseBody
 	public OrderDto getOrderById(@PathVariable Long orderId) {
@@ -109,7 +111,7 @@ public class OrderController {
 	}
 	
 	@PutMapping(value = "/{orderId}/dessert")
-	public void addDessert(@PathVariable Long orderId, DessertDto dessertDto) {
+	public void addDessert(@PathVariable Long orderId, @RequestBody DessertDto dessertDto) {
 		orderAdapter.getById(orderId)
 			.ifPresent(order -> {
 				var dessert = orderAdapter.findDessertById(dessertDto.getId()).orElseThrow(DessertNotFoundException::new);
@@ -136,16 +138,19 @@ public class OrderController {
 		@PostConstruct
 		@SneakyThrows
 		public void onConstruct() {
+			
 			// Dishes
 			List.of("Falafel", "Fish", "Gazpacho", "Ramen", "Rigatoni", "Hamburguer")
 				.stream()
 				.map(Dish::new)
+				.peek(d -> d.setPrice(new BigDecimal(new Random().nextDouble())))
 				.forEach(orderAdapter::save);
 			
 			// Desserts		
 			List.of("Cake", "Cookie", "Biscuit", "Gelatin", "Ice Cream", "Pie", "Pudding", "Candy")
 				.stream()
 				.map(Dessert::new)
+				.peek(d -> d.setPrice(new BigDecimal(new Random().nextDouble())))
 				.forEach(orderAdapter::save);
 			
 			// Drinks
@@ -153,6 +158,7 @@ public class OrderController {
 					"Negroni", "Old Fashioned", "Expresso Martini", "Passionfruit Martini", "Mimosa")
 				.stream()
 				.map(Drink::new)
+				.peek(d -> d.setPrice(new BigDecimal(new Random().nextDouble())))
 				.forEach(orderAdapter::save);
 			
 			// Orders

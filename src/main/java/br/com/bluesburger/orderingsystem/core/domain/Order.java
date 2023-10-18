@@ -38,6 +38,7 @@ public class Order {
 	@Convert(converter = CpfConverter.class)
 	private Cpf cpf;
 	
+
 	@ManyToMany
 	private List<Dish> dishes = new ArrayList<>();
 
@@ -70,4 +71,5 @@ public class Order {
 	public void remove(Drink drink) {
 		drinks.remove(drink);
 	}
+
 }

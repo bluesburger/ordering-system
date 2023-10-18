@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.bluesburger.orderingsystem.adapters.in.OrderRequest;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.OrderRequest;
 import br.com.bluesburger.orderingsystem.adapters.out.OrderAdapter;
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.OrderNotFoundException;
 import br.com.bluesburger.orderingsystem.core.domain.Order;
