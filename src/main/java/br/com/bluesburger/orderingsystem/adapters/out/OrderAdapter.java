@@ -11,10 +11,10 @@ import br.com.bluesburger.orderingsystem.core.domain.Dish;
 import br.com.bluesburger.orderingsystem.core.domain.Drink;
 import br.com.bluesburger.orderingsystem.core.domain.Order;
 import br.com.bluesburger.orderingsystem.core.domain.OrderStatus;
-import br.com.bluesburger.orderingsystem.core.infrastructure.service.DessertService;
-import br.com.bluesburger.orderingsystem.core.infrastructure.service.DishService;
-import br.com.bluesburger.orderingsystem.core.infrastructure.service.DrinkService;
-import br.com.bluesburger.orderingsystem.core.infrastructure.service.OrderService;
+import br.com.bluesburger.orderingsystem.core.services.DessertService;
+import br.com.bluesburger.orderingsystem.core.services.DishService;
+import br.com.bluesburger.orderingsystem.core.services.DrinkService;
+import br.com.bluesburger.orderingsystem.core.services.OrderService;
 
 @Component
 public class OrderAdapter {

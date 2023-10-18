@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DishNotFoundException;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DishDto;
 import br.com.bluesburger.orderingsystem.core.domain.mapper.DishMapper;
-import br.com.bluesburger.orderingsystem.core.infrastructure.service.DishService;
+import br.com.bluesburger.orderingsystem.core.services.DishService;
 
 @RestController
 @RequestMapping(value = "/api/dish")

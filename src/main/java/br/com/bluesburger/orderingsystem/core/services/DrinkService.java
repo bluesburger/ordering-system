@@ -1,4 +1,4 @@
-package br.com.bluesburger.orderingsystem.core.infrastructure.service;
+package br.com.bluesburger.orderingsystem.core.services;
 
 import java.util.List;
 import java.util.Optional;
