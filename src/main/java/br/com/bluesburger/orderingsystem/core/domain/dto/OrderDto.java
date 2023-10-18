@@ -32,6 +32,9 @@ public class OrderDto implements Serializable {
 	private LocalDateTime createdTime;
 	
 	@NonNull
+	private LocalDateTime updatedTime;
+	
+	@NonNull
 	private List<DishDto> dishes;
 	
 	@NonNull

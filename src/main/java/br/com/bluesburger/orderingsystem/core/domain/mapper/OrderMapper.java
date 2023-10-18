@@ -41,7 +41,7 @@ public class OrderMapper {
 				.map(drinkMapper::toDto)
 				.toList();
 		
-		var orderDto = new OrderDto(order.getId(), order.getStatus(), order.getCreatedTime(), dishes, desserts, drinks);
+		var orderDto = new OrderDto(order.getId(), order.getStatus(), order.getCreatedTime(), order.getUpdatedTime(), dishes, desserts, drinks);
 		orderDto.setCpf(order.getCpf());
 		return orderDto;
 	}
@@ -54,11 +54,11 @@ public class OrderMapper {
 		OrderStatus.from(orderDto.getStatus()).ifPresent(order::setStatus);
 		return order;
 	}
-
-	public Order from(OrderRequest orderRequest) {
-		var order = new Order();
+	
+	public Order from(Order order, OrderRequest orderRequest) {
 		order.setId(orderRequest.getId());
 		order.setCpf(orderRequest.getCpf());
+		order.setStatus(orderRequest.getStatus());
 
 		orderRequest.getDishes().stream()
 			.map(c -> c.getId())
@@ -82,5 +82,9 @@ public class OrderMapper {
 			.forEach(order::add);
 		
 		return order;
+	}
+
+	public Order from(OrderRequest orderRequest) {
+		return from(new Order(), orderRequest);
 	}
 }

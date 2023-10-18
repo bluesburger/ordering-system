@@ -20,6 +20,10 @@ public class OrderService {
 		return orderRepository.findById(orderId);
 	}
 	
+	public Order update(Order order) {
+		return orderRepository.save(order);
+	}
+	
 	public Order save(Order order) {
 		return orderRepository.save(order);
 	}

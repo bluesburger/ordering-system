@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import br.com.bluesburger.orderingsystem.core.domain.valueobject.Cpf;
 import lombok.Data;
@@ -31,6 +32,9 @@ public class Order {
 	
 	@CreationTimestamp
 	private LocalDateTime createdTime;
+	
+	@UpdateTimestamp
+	private LocalDateTime updatedTime;
 
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status = OrderStatus.PEDIDO_REALIZADO;
@@ -70,6 +74,10 @@ public class Order {
 	
 	public void remove(Drink drink) {
 		drinks.remove(drink);
+	}
+	
+	public void updateSituation(OrderStatus status) {
+		this.status = status;
 	}
 
 }
