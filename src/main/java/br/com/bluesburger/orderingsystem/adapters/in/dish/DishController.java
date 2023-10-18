@@ -24,7 +24,7 @@ public class DishController {
 	@Autowired
 	private DishMapper dishMapper;
 	
-	@GetMapping("/")
+	@GetMapping
 	@ResponseBody
 	public List<DishDto> listAll() {
 		return dishService.listAll().stream()

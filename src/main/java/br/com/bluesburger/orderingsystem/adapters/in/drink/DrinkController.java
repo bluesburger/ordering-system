@@ -24,7 +24,7 @@ public class DrinkController {
 	@Autowired
 	private DrinkMapper drinkMapper;
 	
-	@GetMapping("/")
+	@GetMapping
 	@ResponseBody
 	public List<DrinkDto> listAll() {
 		return drinkService.listAll().stream()

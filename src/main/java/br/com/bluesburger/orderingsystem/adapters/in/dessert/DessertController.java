@@ -24,7 +24,7 @@ public class DessertController {
 	@Autowired
 	private DessertMapper dessertMapper;
 	
-	@GetMapping("/")
+	@GetMapping
 	@ResponseBody
 	public List<DessertDto> listAll() {
 		return dessertService.listAll().stream()
