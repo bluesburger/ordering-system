@@ -5,12 +5,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.CreateOrderRequest;
 import br.com.bluesburger.orderingsystem.adapters.in.order.dto.OrderRequest;
-import br.com.bluesburger.orderingsystem.adapters.out.OrderAdapter;
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.OrderNotFoundException;
 import br.com.bluesburger.orderingsystem.core.domain.Order;
 import br.com.bluesburger.orderingsystem.core.domain.OrderStatus;
 import br.com.bluesburger.orderingsystem.core.domain.dto.OrderDto;
+import br.com.bluesburger.orderingsystem.core.services.DessertService;
+import br.com.bluesburger.orderingsystem.core.services.DishService;
+import br.com.bluesburger.orderingsystem.core.services.DrinkService;
 
 @Component
 public class OrderMapper {
@@ -25,7 +28,13 @@ public class OrderMapper {
 	private DrinkMapper drinkMapper;
 	
 	@Autowired
-	private OrderAdapter orderAdapter;
+	private DishService dishService;
+	
+	@Autowired
+	private DrinkService drinkService;
+	
+	@Autowired
+	private DessertService dessertService;
 	
 	public OrderDto toDto(Order order) {
 		var validOrder = Optional.ofNullable(order).orElseThrow(OrderNotFoundException::new);
@@ -62,21 +71,21 @@ public class OrderMapper {
 
 		orderRequest.getDishes().stream()
 			.map(c -> c.getId())
-			.map(orderAdapter::findDishById)
+			.map(dishService::getById)
 			.filter(d -> d.isPresent())
 			.map(d -> d.get())
 			.forEach(order::add);
 		
 		orderRequest.getDesserts().stream()
 			.map(c -> c.getId())
-			.map(orderAdapter::findDessertById)
+			.map(dessertService::getById)
 			.filter(d -> d.isPresent())
 			.map(d -> d.get())
 			.forEach(order::add);
 		
 		orderRequest.getDrinks().stream()
 			.map(c -> c.getId())
-			.map(orderAdapter::findDrinkById)
+			.map(drinkService::getById)
 			.filter(d -> d.isPresent())
 			.map(d -> d.get())
 			.forEach(order::add);
@@ -86,5 +95,34 @@ public class OrderMapper {
 
 	public Order from(OrderRequest orderRequest) {
 		return from(new Order(), orderRequest);
+	}
+	
+	public Order from(CreateOrderRequest orderRequest) {
+		var order = new Order();
+		order.setCpf(orderRequest.getCpf());
+		order.setStatus(orderRequest.getStatus());
+
+		orderRequest.getDishes().stream()
+			.map(c -> c.getId())
+			.map(dishService::getById)
+			.filter(d -> d.isPresent())
+			.map(d -> d.get())
+			.forEach(order::add);
+		
+		orderRequest.getDesserts().stream()
+			.map(c -> c.getId())
+			.map(dessertService::getById)
+			.filter(d -> d.isPresent())
+			.map(d -> d.get())
+			.forEach(order::add);
+		
+		orderRequest.getDrinks().stream()
+			.map(c -> c.getId())
+			.map(drinkService::getById)
+			.filter(d -> d.isPresent())
+			.map(d -> d.get())
+			.forEach(order::add);
+		
+		return order;
 	}
 }
