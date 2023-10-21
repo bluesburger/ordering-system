@@ -1,8 +1,8 @@
 package br.com.bluesburger.orderingsystem.core.ports;
 
-import br.com.bluesburger.orderingsystem.core.domain.User;
-
 import java.util.Optional;
+
+import br.com.bluesburger.orderingsystem.core.domain.User;
 
 public interface UserPort {
 
