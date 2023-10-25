@@ -6,8 +6,8 @@ public class PaymentMapper {
 
     public static PaymentResponse mapperPaymentToPaymentResponse(Payment source) {
         PaymentResponse target = new PaymentResponse();
-            //logica passar o source pro target
 
+        target.setTotalAmount(target.getTotalAmount());
 
         return target;
     }
