@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PaymentPixStrategy implements PaymentStrategy {
 
-    public String checkoutPayment(Payment payment){
-        return "Pagamento via pix realizado com sucesso !";
+    public String checkoutPayment(Payment payment) {
+        return "Pagamento via PIX realizado com sucesso!";
     }
-
 }

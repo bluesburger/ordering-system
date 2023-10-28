@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.bluesburger.orderingsystem.core.domain.Drink;
-import br.com.bluesburger.orderingsystem.core.infrastructure.repository.DrinkRepository;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.DrinkRepository;
 
 @Service
 public class DrinkService {

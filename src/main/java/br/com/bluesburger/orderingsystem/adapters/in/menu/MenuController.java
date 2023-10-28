@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import static br.com.bluesburger.orderingsystem.adapters.in.menu.dto.MenuMapper.mapperMenuToMenuResponse;
 import static br.com.bluesburger.orderingsystem.core.domain.factory.UserFactory.buildUser;
+import static java.lang.Character.getNumericValue;
+import static java.util.Objects.nonNull;
 
 @RestController()
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class MenuController {
 
     private final MenuService menuService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<MenuResponse> listDishes(
             @RequestParam(name = "cpf_user", required = false) String cpfUSer,
             @RequestParam(name = "user_identified", required = true) String userIdentified) {
@@ -39,7 +42,39 @@ public class MenuController {
     }
 
     private void validateCPF(String cpf) {
-        // TODO - verificar se o cpf informado é válido
+        if (!cpf.isBlank()) {
+            final var cpfFormated = cpf.replaceAll("\\D", "");
+
+            if (cpfFormated.length() != 11) {
+                throw new IllegalArgumentException("O CPF informado é inválido! pois não possui 11 dígitos");
+            }
+
+            var sum = IntStream.range(0, 9)
+                    .map(i -> getNumericValue(cpfFormated.charAt(i)) * (10 - i))
+                    .sum();
+
+            var firstVerificationDigit = 11 - (sum % 11);
+            if (firstVerificationDigit >= 10) {
+                firstVerificationDigit = 0;
+            }
+
+            if (getNumericValue(cpfFormated.charAt(9)) != firstVerificationDigit) {
+                throw new IllegalArgumentException("CPF inválido.");
+            }
+
+            sum = IntStream.range(0, 10)
+                    .map(i -> getNumericValue(cpfFormated.charAt(i)) * (11 - i))
+                    .sum();
+
+            var secondVerificationDigit = 11 - (sum % 11);
+            if (secondVerificationDigit >= 10) {
+                secondVerificationDigit = 0;
+            }
+
+            if (getNumericValue(cpf.charAt(10)) != secondVerificationDigit) {
+                throw new IllegalArgumentException("CPF inválido.");
+            }
+        }
     }
 
     private User buildUserWithParams(String cpf, String userIdentified) {

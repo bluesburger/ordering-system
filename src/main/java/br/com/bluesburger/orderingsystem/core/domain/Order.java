@@ -1,26 +1,16 @@
 package br.com.bluesburger.orderingsystem.core.domain;
 
+import br.com.bluesburger.orderingsystem.adapters.out.exceptions.OrderSituationIllegal;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
-
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import br.com.bluesburger.orderingsystem.adapters.out.exceptions.OrderSituationIllegal;
-import br.com.bluesburger.orderingsystem.core.domain.valueobject.Cpf;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity(name = "orders")
 @Data
@@ -39,9 +29,6 @@ public class Order {
 
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status = OrderStatus.PEDIDO_REALIZADO;
-	
-	@Convert(converter = CpfConverter.class)
-	private Cpf cpf;
 
 	@ManyToMany
 	private List<Dish> dishes = new ArrayList<>();
@@ -51,6 +38,10 @@ public class Order {
 	
 	@ManyToMany
 	private List<Drink> drinks = new ArrayList<>();
+
+	@Convert(converter = CpfConverter.class)
+	@ManyToOne
+	private User user;
 
 	public void add(Dish... newDishes) {
 		verifyIfCanModifyItems();

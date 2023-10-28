@@ -1,29 +1,34 @@
 package br.com.bluesburger.orderingsystem.adapters.in.payment;
 
-import br.com.bluesburger.orderingsystem.core.domain.Order;
-import br.com.bluesburger.orderingsystem.core.domain.Payment;
-import br.com.bluesburger.orderingsystem.core.services.PaymentService;
+import br.com.bluesburger.orderingsystem.adapters.in.payment.dto.PaymentRequest;
+import br.com.bluesburger.orderingsystem.adapters.in.payment.dto.PaymentResponse;
+import br.com.bluesburger.orderingsystem.core.ports.out.PaymentPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import static br.com.bluesburger.orderingsystem.adapters.in.payment.dto.PaymentMapper.mapperPaymentRequestToPayment;
+import static br.com.bluesburger.orderingsystem.adapters.in.payment.dto.PaymentMapper.mapperPaymentToPaymentResponse;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class PaymentController {
 
-    private final PaymentService paymentService;
+    private final PaymentPort paymentPort;
 
     @PostMapping("/payment")
-    public ResponseEntity<String> makePayment(@RequestBody Payment payment) {
-        //mapeamento da classe paymentrequest para a classe payment
+    public ResponseEntity<PaymentResponse> makePayment(@RequestBody PaymentRequest paymentRequest) {
 
-        //chamar a classe de serviço fazendo um pedido
-        paymentService.processPayment(payment);
+        var payment = mapperPaymentRequestToPayment(paymentRequest);
 
-        return ResponseEntity.ok("");
+        final var paymentProcessed = paymentPort.processPayment(payment);
+        var paymentResponse = mapperPaymentToPaymentResponse(paymentProcessed);
+
+        return ResponseEntity.ok(paymentResponse);
     }
 
 }

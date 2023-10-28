@@ -9,20 +9,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuResponse {
+public class MenuResponse implements Serializable {
+
+    private static final long serialVersionUID = -814389075442231294L;
 
     @JsonProperty("dishes")
     private List<Dish> dishes;
 
-    @JsonProperty("dishes")
+    @JsonProperty("drinks")
     private List<Drink> drinks;
 
-    @JsonProperty("dishes")
+    @JsonProperty("desserts")
     private List<Dessert> desserts;
 }

@@ -2,6 +2,7 @@ package br.com.bluesburger.orderingsystem.core.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -18,10 +19,10 @@ import br.com.bluesburger.orderingsystem.core.domain.dto.DessertDto;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DishDto;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DrinkDto;
 import br.com.bluesburger.orderingsystem.core.domain.valueobject.Cpf;
-import br.com.bluesburger.orderingsystem.core.infrastructure.repository.DessertRepository;
-import br.com.bluesburger.orderingsystem.core.infrastructure.repository.DishRepository;
-import br.com.bluesburger.orderingsystem.core.infrastructure.repository.DrinkRepository;
-import br.com.bluesburger.orderingsystem.core.infrastructure.repository.OrderRepository;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.DessertRepository;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.DishRepository;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.DrinkRepository;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.OrderRepository;
 
 @Service
 @Transactional
@@ -58,31 +59,31 @@ public class OrderService {
 	public Order createOrder(Cpf cpf, List<DishDto> dishesDto,
 			List<DrinkDto> drinksDto, List<DessertDto> dessertsDto) {
 		var order = new Order();
-		order.setCpf(cpf);
+		order.setUser(order.getUser());;
 		order.setStatus(OrderStatus.PEDIDO_REALIZADO);
 		
 		var dishes = dishesDto.stream()
 			.map(DishDto::getId)
 			.map(dishRepository::findById)
-			.filter(opt -> opt.isPresent())
-			.map(opt -> opt.get())
-			.toList();
+			.filter(Optional::isPresent)
+			.map(Optional::get)
+			.collect(Collectors.toList());
 		order.setDishes(dishes);
 		
 		var drinks = drinksDto.stream()
 			.map(DrinkDto::getId)
 			.map(drinkRepository::findById)
-			.filter(opt -> opt.isPresent())
-			.map(opt -> opt.get())
-			.toList();
+			.filter(Optional::isPresent)
+			.map(Optional::get)
+			.collect(Collectors.toList());
 		order.setDrinks(drinks);
 		
 		var desserts = dessertsDto.stream()
 			.map(DessertDto::getId)
 			.map(dessertRepository::findById)
-			.filter(opt -> opt.isPresent())
-			.map(opt -> opt.get())
-			.toList();
+			.filter(Optional::isPresent)
+			.map(Optional::get)
+			.collect(Collectors.toList());
 		order.setDesserts(desserts);
 		
 		return save(order);

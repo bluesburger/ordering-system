@@ -1,6 +1,7 @@
 package br.com.bluesburger.orderingsystem.adapters.in.drink;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,7 @@ public class DrinkController {
 	public List<DrinkDto> listAll() {
 		return drinkService.listAll().stream()
 				.map(drinkMapper::toDto)
-				.toList();
+				.collect(Collectors.toList());
 	}
 	
 	@GetMapping("/{drinkId}")

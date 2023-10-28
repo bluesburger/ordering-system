@@ -5,10 +5,15 @@ import br.com.bluesburger.orderingsystem.core.domain.Payment;
 public class PaymentMapper {
 
     public static PaymentResponse mapperPaymentToPaymentResponse(Payment source) {
-        PaymentResponse target = new PaymentResponse();
-            //logica passar o source pro target
+        return PaymentResponse.builder()
+                .message(source.getMessage())
+                .build();
+    }
 
-
-        return target;
+    public static Payment mapperPaymentRequestToPayment(PaymentRequest source) {
+        return Payment.builder()
+                .totalValue(source.getTotalValue())
+                .paymentMethod(source.getPaymentMethod())
+                .build();
     }
 }

@@ -1,4 +1,4 @@
-package br.com.bluesburger.orderingsystem.core.infrastructure.repository;
+package br.com.bluesburger.orderingsystem.adapters.out.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

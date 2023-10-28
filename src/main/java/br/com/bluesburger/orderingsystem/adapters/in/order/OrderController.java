@@ -1,6 +1,7 @@
 package br.com.bluesburger.orderingsystem.adapters.in.order;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -74,7 +75,7 @@ public class OrderController {
 	public List<OrderDto> getOrderById(@PathVariable OrderStatus status) {
 		return orderService.findAll(status).stream()
 				.map(orderMapper::toDto)
-				.toList();
+				.collect(Collectors.toList());
 	}
 	
 	@PutMapping(value = "/{orderId}/drink")

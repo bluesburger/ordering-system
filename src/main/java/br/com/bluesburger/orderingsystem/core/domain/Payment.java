@@ -1,13 +1,21 @@
 package br.com.bluesburger.orderingsystem.core.domain;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
-@Data
+
+@Getter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Payment {
 
-    private final BigDecimal totalValue;
-    private final String paymentMethod;
+    private BigDecimal totalValue;
+    private String paymentMethod;
+    private String message;
+
+    public void updateMessagePayment(String message) {
+        this.message = message;
+    }
 }

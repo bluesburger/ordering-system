@@ -6,9 +6,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PaymentCreditCardStrategy implements PaymentStrategy{
+public class PaymentCreditCardStrategy implements PaymentStrategy {
+
     @Override
     public String checkoutPayment(Payment payment) {
-        return "Pagamento via credit realizado com sucesso !";
+        return "Pagamento via cartao de credito realizado com sucesso!";
     }
 }

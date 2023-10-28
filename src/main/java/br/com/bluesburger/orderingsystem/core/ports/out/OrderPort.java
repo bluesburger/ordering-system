@@ -1,4 +1,4 @@
-package br.com.bluesburger.orderingsystem.core.ports;
+package br.com.bluesburger.orderingsystem.core.ports.out;
 
 import br.com.bluesburger.orderingsystem.core.domain.Order;
 import br.com.bluesburger.orderingsystem.core.domain.User;

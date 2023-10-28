@@ -1,7 +1,9 @@
 package br.com.bluesburger.orderingsystem.core.domain.mapper;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import br.com.bluesburger.orderingsystem.core.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,25 +42,34 @@ public class OrderMapper {
 		var validOrder = Optional.ofNullable(order).orElseThrow(OrderNotFoundException::new);
 		var dishes = validOrder.getDishes().stream()
 				.map(dishMapper::toDto)
-				.toList();
+				.collect(Collectors.toList());
 		
 		var desserts = validOrder.getDesserts().stream()
 				.map(dessertMapper::toDto)
-				.toList();
+				.collect(Collectors.toList());
 		
 		var drinks = validOrder.getDrinks().stream()
 				.map(drinkMapper::toDto)
-				.toList();
+				.collect(Collectors.toList());
 		
-		var orderDto = new OrderDto(order.getId(), order.getStatus(), order.getCreatedTime(), order.getUpdatedTime(), dishes, desserts, drinks);
-		orderDto.setCpf(order.getCpf());
+		var orderDto = OrderDto.builder()
+				.id(order.getId())
+				.status(order.getStatus())
+				.createdTime(order.getCreatedTime())
+				.updatedTime(order.getUpdatedTime())
+				.dishes(dishes)
+				.drinks(drinks)
+				.desserts(desserts)
+				.build();
+
+		orderDto.setUser(order.getUser());
 		return orderDto;
 	}
 
 	public Order from(OrderDto orderDto) {
 		var order = new Order();
 		order.setId(orderDto.getId());
-		order.setCpf(orderDto.getCpf());
+		orderDto.setUser(order.getUser());;
 		order.setCreatedTime(orderDto.getCreatedTime());
 		OrderStatus.from(orderDto.getStatus()).ifPresent(order::setStatus);
 		return order;
@@ -66,7 +77,7 @@ public class OrderMapper {
 	
 	public Order from(Order order, OrderRequest orderRequest) {
 		order.setId(orderRequest.getId());
-		order.setCpf(orderRequest.getCpf());
+		order.setUser(order.getUser());
 		order.setStatus(orderRequest.getStatus());
 
 		orderRequest.getDishes().stream()
@@ -99,7 +110,7 @@ public class OrderMapper {
 	
 	public Order from(CreateOrderRequest orderRequest) {
 		var order = new Order();
-		order.setCpf(orderRequest.getCpf());
+		order.setUser(order.getUser());;
 		order.setStatus(orderRequest.getStatus());
 
 		orderRequest.getDishes().stream()
