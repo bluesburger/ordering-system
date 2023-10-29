@@ -1,11 +1,15 @@
 package br.com.bluesburger.orderingsystem.core.services;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import br.com.bluesburger.orderingsystem.adapters.out.repository.*;
+import br.com.bluesburger.orderingsystem.core.domain.User;
+import br.com.bluesburger.orderingsystem.core.ports.out.UserPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +23,6 @@ import br.com.bluesburger.orderingsystem.core.domain.dto.DessertDto;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DishDto;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DrinkDto;
 import br.com.bluesburger.orderingsystem.core.domain.valueobject.Cpf;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DessertRepository;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DishRepository;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DrinkRepository;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.OrderRepository;
 
 @Service
 @Transactional
@@ -39,6 +39,9 @@ public class OrderService {
 	
 	@Autowired
 	private DrinkRepository drinkRepository;
+
+	@Autowired
+	private UserPort userPort;
 	
 	public Optional<Order> getById(Long orderId) {
 		return orderRepository.findById(orderId);
@@ -49,7 +52,16 @@ public class OrderService {
 	}
 	
 	public Order save(Order order) {
-		return orderRepository.save(order);
+		var user = order.getUser();
+
+
+		final var enrichedOrder = orderRepository.save(order);
+		if(user.getIdentified_user()){
+			user.setOrders(List.of(order));
+			userPort.updateUserByCpf(user);
+		}
+
+		return enrichedOrder;
 	}
 
 	public List<Order> findAll(OrderStatus status) {
@@ -57,9 +69,9 @@ public class OrderService {
 	}
 
 	public Order createOrder(Cpf cpf, List<DishDto> dishesDto,
-			List<DrinkDto> drinksDto, List<DessertDto> dessertsDto) {
+			List<DrinkDto> drinksDto, List<DessertDto> dessertsDto, User user) {
 		var order = new Order();
-		order.setUser(order.getUser());;
+		order.setUser(user);;
 		order.setStatus(OrderStatus.PEDIDO_REALIZADO);
 		
 		var dishes = dishesDto.stream()

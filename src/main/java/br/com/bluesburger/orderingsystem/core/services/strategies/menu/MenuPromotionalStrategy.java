@@ -38,27 +38,35 @@ public class MenuPromotionalStrategy implements MenuStrategy {
     }
 
     private void applyDiscounts(Menu menuDefault, List<Order> ordersUser) {
-        Map<Object, Long> countOrders = ordersUser.stream()
-                .collect(Collectors.groupingBy(order -> order, Collectors.counting()));
 
-        applyDiscountDishes(menuDefault.getDishes(), countOrders);
-        applyDiscountDrinks(menuDefault.getDrinks(), countOrders);
-        applyDiscountDesserts(menuDefault.getDesserts(), countOrders);
+
+        applyDiscountDishes(menuDefault.getDishes(), ordersUser);
+        applyDiscountDrinks(menuDefault.getDrinks(), ordersUser);
+        applyDiscountDesserts(menuDefault.getDesserts(), ordersUser);
     }
 
-    private void applyDiscountDishes(List<Dish> dishes, Map<Object, Long> countOrders) {
+    private void applyDiscountDishes(List<Dish> dishes, List<Order> ordersUser) {
+        Map<Object, Long> countOrders = ordersUser.stream().flatMap(order -> order.getDishes().stream())
+                .collect(Collectors.groupingBy(dish -> dish, Collectors.counting()));
+
         dishes.stream()
                 .filter(dishe -> countOrders.containsKey(dishe) && countOrders.get(dishe) > 10)
                 .forEach(Dish::applyTenPercentDiscount);
     }
 
-    private void applyDiscountDrinks(List<Drink> drinks, Map<Object, Long> countOrders) {
+    private void applyDiscountDrinks(List<Drink> drinks, List<Order> ordersUser) {
+        Map<Object, Long> countOrders = ordersUser.stream().flatMap(order -> order.getDrinks().stream())
+                .collect(Collectors.groupingBy(drink -> drink, Collectors.counting()));
+
         drinks.stream()
                 .filter(drink -> countOrders.containsKey(drink) && countOrders.get(drink) > 10)
                 .forEach(Drink::applyFivePercentDiscount);
     }
 
-    private void applyDiscountDesserts(List<Dessert> desserts, Map<Object, Long> countOrders) {
+    private void applyDiscountDesserts(List<Dessert> desserts, List<Order> ordersUser) {
+        Map<Object, Long> countOrders = ordersUser.stream().flatMap(order -> order.getDesserts().stream())
+                .collect(Collectors.groupingBy(dessert -> dessert, Collectors.counting()));
+
         desserts.stream()
                 .filter(dessert -> countOrders.containsKey(dessert) && countOrders.get(dessert) > 10)
                 .forEach(Dessert::applyFifteenPercentDiscount);

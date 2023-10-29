@@ -2,6 +2,7 @@ package br.com.bluesburger.orderingsystem.core.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -48,7 +49,7 @@ public class Dessert implements Serializable {
 
     public void applyFifteenPercentDiscount() {
         BigDecimal discount = price.multiply(BigDecimal.valueOf(0.15));
-        price = price.subtract(discount);
+        price = price.subtract(discount).setScale(2, RoundingMode.HALF_UP);
     }
 
 }

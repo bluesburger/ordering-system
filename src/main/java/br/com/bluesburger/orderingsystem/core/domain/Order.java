@@ -1,22 +1,29 @@
 package br.com.bluesburger.orderingsystem.core.domain;
 
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.OrderSituationIllegal;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 @Entity(name = "orders")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class Order {
-	
+public class Order implements Serializable {
+
+	private static final long serialVersionUID = 4781858089323528412L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -41,6 +48,8 @@ public class Order {
 
 	@Convert(converter = CpfConverter.class)
 	@ManyToOne
+	@JsonIgnoreProperties("orders")
+	@JoinColumn(name = "user_id")
 	private User user;
 
 	public void add(Dish... newDishes) {

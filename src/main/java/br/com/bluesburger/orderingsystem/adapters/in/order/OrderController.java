@@ -37,7 +37,7 @@ public class OrderController {
 	@PostMapping
 	public OrderDto crateOrder(@RequestBody CreateOrderRequest command) {
 		var createdOrder = orderService.createOrder(command.getCpf(), 
-				command.getDishes(), command.getDrinks(), command.getDesserts());
+				command.getDishes(), command.getDrinks(), command.getDesserts(), command.getUser());
 		
 		return orderMapper.toDto(createdOrder);
 	}

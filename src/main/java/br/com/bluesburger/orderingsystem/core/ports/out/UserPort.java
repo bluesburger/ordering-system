@@ -6,7 +6,9 @@ import java.util.Optional;
 
 public interface UserPort {
 
-    Optional<User> getUserByCpf(String cpf);
+   User getUserByCpf(String cpf);
 
     User saveUser(User user);
+
+    User updateUserByCpf(User user);
 }

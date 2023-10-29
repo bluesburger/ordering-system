@@ -60,9 +60,10 @@ public class OrderMapper {
 				.dishes(dishes)
 				.drinks(drinks)
 				.desserts(desserts)
+				.user(order.getUser())
 				.build();
 
-		orderDto.setUser(order.getUser());
+
 		return orderDto;
 	}
 
