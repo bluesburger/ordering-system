@@ -3,12 +3,10 @@ package br.com.bluesburger.orderingsystem.core.domain.mapper;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import br.com.bluesburger.orderingsystem.core.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.bluesburger.orderingsystem.adapters.in.order.dto.CreateOrderRequest;
-import br.com.bluesburger.orderingsystem.adapters.in.order.dto.OrderRequest;
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.OrderNotFoundException;
 import br.com.bluesburger.orderingsystem.core.domain.Order;
 import br.com.bluesburger.orderingsystem.core.domain.OrderStatus;
@@ -74,39 +72,6 @@ public class OrderMapper {
 		order.setCreatedTime(orderDto.getCreatedTime());
 		OrderStatus.from(orderDto.getStatus()).ifPresent(order::setStatus);
 		return order;
-	}
-	
-	public Order from(Order order, OrderRequest orderRequest) {
-		order.setId(orderRequest.getId());
-		order.setUser(order.getUser());
-		order.setStatus(orderRequest.getStatus());
-
-		orderRequest.getDishes().stream()
-			.map(c -> c.getId())
-			.map(dishService::getById)
-			.filter(d -> d.isPresent())
-			.map(d -> d.get())
-			.forEach(order::add);
-		
-		orderRequest.getDesserts().stream()
-			.map(c -> c.getId())
-			.map(dessertService::getById)
-			.filter(d -> d.isPresent())
-			.map(d -> d.get())
-			.forEach(order::add);
-		
-		orderRequest.getDrinks().stream()
-			.map(c -> c.getId())
-			.map(drinkService::getById)
-			.filter(d -> d.isPresent())
-			.map(d -> d.get())
-			.forEach(order::add);
-		
-		return order;
-	}
-
-	public Order from(OrderRequest orderRequest) {
-		return from(new Order(), orderRequest);
 	}
 	
 	public Order from(CreateOrderRequest orderRequest) {
