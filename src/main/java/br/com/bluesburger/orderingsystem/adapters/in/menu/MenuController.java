@@ -1,23 +1,23 @@
 package br.com.bluesburger.orderingsystem.adapters.in.menu;
 
-import br.com.bluesburger.orderingsystem.adapters.in.menu.dto.MenuResponse;
-import br.com.bluesburger.orderingsystem.core.domain.User;
-import br.com.bluesburger.orderingsystem.core.services.MenuService;
-import lombok.RequiredArgsConstructor;
+import static br.com.bluesburger.orderingsystem.adapters.in.menu.dto.MenuMapper.mapperMenuToMenuResponse;
+import static br.com.bluesburger.orderingsystem.core.domain.factory.UserFactory.buildUser;
+import static java.lang.Character.getNumericValue;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.IntStream;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.IntStream;
-
-import static br.com.bluesburger.orderingsystem.adapters.in.menu.dto.MenuMapper.mapperMenuToMenuResponse;
-import static br.com.bluesburger.orderingsystem.core.domain.factory.UserFactory.buildUser;
-import static java.lang.Character.getNumericValue;
-import static java.util.Objects.nonNull;
+import br.com.bluesburger.orderingsystem.adapters.in.menu.dto.MenuResponse;
+import br.com.bluesburger.orderingsystem.core.domain.User;
+import br.com.bluesburger.orderingsystem.core.services.MenuService;
+import lombok.RequiredArgsConstructor;
 
 @RestController()
 @RequiredArgsConstructor

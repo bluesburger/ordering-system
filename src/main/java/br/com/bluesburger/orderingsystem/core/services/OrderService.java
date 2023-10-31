@@ -1,5 +1,15 @@
 package br.com.bluesburger.orderingsystem.core.services;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DessertNotFoundException;
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DishNotFoundException;
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DrinkNotFoundException;
@@ -8,20 +18,15 @@ import br.com.bluesburger.orderingsystem.adapters.out.repository.DessertReposito
 import br.com.bluesburger.orderingsystem.adapters.out.repository.DishRepository;
 import br.com.bluesburger.orderingsystem.adapters.out.repository.DrinkRepository;
 import br.com.bluesburger.orderingsystem.adapters.out.repository.OrderRepository;
-import br.com.bluesburger.orderingsystem.core.domain.*;
+import br.com.bluesburger.orderingsystem.core.domain.Dessert;
+import br.com.bluesburger.orderingsystem.core.domain.Dish;
+import br.com.bluesburger.orderingsystem.core.domain.Drink;
+import br.com.bluesburger.orderingsystem.core.domain.Order;
+import br.com.bluesburger.orderingsystem.core.domain.OrderStatus;
+import br.com.bluesburger.orderingsystem.core.domain.User;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DessertDto;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DishDto;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DrinkDto;
-import br.com.bluesburger.orderingsystem.core.domain.valueobject.Cpf;
-import br.com.bluesburger.orderingsystem.core.ports.out.UserPort;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -40,9 +45,6 @@ public class OrderService {
     private DrinkRepository drinkRepository;
 
     @Autowired
-    private UserPort userPort;
-
-    @Autowired
     private UserService userService;
 
     public Optional<Order> getById(Long orderId) {
@@ -51,10 +53,6 @@ public class OrderService {
 
     public Order update(Order order) {
         return orderRepository.save(order);
-    }
-
-    private void updateOrderWithEnrichedData(Order order, Optional<Order> recoveredOrder) {
-
     }
 
     public Order save(Order order) {
@@ -69,8 +67,8 @@ public class OrderService {
         return orderRepository.findAllByStatus(status);
     }
 
-    public Order createOrder(Cpf cpf, List<DishDto> dishesDto,
-                             List<DrinkDto> drinksDto, List<DessertDto> dessertsDto, User user) {
+    public Order createOrder(List<DishDto> dishesDto, List<DrinkDto> drinksDto, 
+    		List<DessertDto> dessertsDto, User user) {
         var order = new Order();
         var userValidate = userService.validateUser(user);
         order.setUser(userValidate);

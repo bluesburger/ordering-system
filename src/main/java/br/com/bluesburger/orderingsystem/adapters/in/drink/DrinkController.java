@@ -16,7 +16,7 @@ import br.com.bluesburger.orderingsystem.core.domain.mapper.DrinkMapper;
 import br.com.bluesburger.orderingsystem.core.services.DrinkService;
 
 @RestController
-@RequestMapping(value = "/api/drink")
+@RequestMapping(value = "/api/v1/drink")
 public class DrinkController {
 	
 	@Autowired
