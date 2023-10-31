@@ -22,27 +22,37 @@ O projeto ainda está em desenvolvimento e as próximas atualizações serão vo
 Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
 * Você tem uma máquina `<Windows / Linux / Mac>`.
+* Docker 
+* Postman ou insomnia
+* Jdk 11 ou superior 
 
 ## 🚀 Instalando ordering-system
 
 Para instalar o ordering-system, siga estas etapas:
 
-Linux e macOS:
-```
-<comando_de_instalação>
-```
+Clone o projeto com o git 
 
-Windows:
 ```
-<comando_de_instalação>
+git clone https://github.com/bluesburger/ordering-system.git
+```
+No terminal execute
+```
+docker compose -fdocker-compose.yml up --build
 ```
 
 ## ☕ Usando ordering-system
 
 Para usar ordering-system, siga estas etapas:
 
+Acesse a documentação do swagger
+
 ```
-<exemplo_de_uso>
+localhost:8181/swagger-ui.html
+```
+Importa no postman
+
+```
+http://localhost:8181/v2/api-docs
 ```
 
 Adicione comandos de execução e exemplos que você acha que os usuários acharão úteis. Fornece uma referência de opções para pontos de bônus!
