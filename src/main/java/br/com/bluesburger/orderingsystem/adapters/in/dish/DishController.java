@@ -30,7 +30,7 @@ public class DishController {
 	public List<DishDto> listAll() {
 		return dishService.listAll().stream()
 				.map(dishMapper::toDto)
-				.collect(Collectors.toList());
+				.toList();
 	}
 	
 	@GetMapping("/{dishId}")

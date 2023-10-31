@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Getter
-public class DrinkDto implements Serializable {
+public class DrinkDto implements ProductDto, Serializable {
 
 	private static final long serialVersionUID = -2380385291965737284L;
 

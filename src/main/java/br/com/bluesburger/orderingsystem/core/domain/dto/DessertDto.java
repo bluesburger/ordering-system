@@ -14,7 +14,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Getter
-public class DessertDto implements Serializable {
+public class DessertDto implements ProductDto, Serializable {
 
 	private static final long serialVersionUID = -2380385291965737284L;
 
