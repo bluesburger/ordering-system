@@ -11,6 +11,8 @@ services:
       MYSQL_DATABASE: dbbluesburger
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
+    ports:
+      - "3306:3306"
     expose:
       - 3306
       - 33060
@@ -24,7 +26,7 @@ services:
     image: amazoncorretto:11-al2023-jdk
     container_name: application-java
     ports:
-      - "8080:8080"
+      - "8181:8080"
     networks:
       - spring-boot-mysql-network
     depends_on:
