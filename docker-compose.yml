@@ -11,19 +11,22 @@ services:
       MYSQL_DATABASE: dbbluesburger
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
+    ports:
+      - "3306:3306"
     expose:
       - 3306
       - 33060
     networks:
       - spring-boot-mysql-network
-  aplication:
+  
+  application:
     build:
       context: .
       dockerfile: Dockerfile
     image: amazoncorretto:11-al2023-jdk
     container_name: application-java
     ports:
-      - "8080:8080"
+      - "8181:8080"
     networks:
       - spring-boot-mysql-network
     depends_on:
@@ -36,9 +39,11 @@ services:
     volumes:
       - db_app:/var/lib/app
     command: [ "java", "-jar", "/var/lib/app/orderingsystem-0.0.1-SNAPSHOT.jar" ]
+
 networks:
   spring-boot-mysql-network:
     driver: bridge
+
 volumes:
   db_data:
   db_app:

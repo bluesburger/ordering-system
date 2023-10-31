@@ -1,60 +1,58 @@
 ### Ordering System 
 
-![GitHub repo size](https://img.shields.io/github/repo-size/iuricode/README-template?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/iuricode/README-template?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/iuricode/README-template?style=for-the-badge)
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/iuricode/README-template?style=for-the-badge)
-![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/iuricode/README-template?style=for-the-badge)
 
-<img src="imagem.png" alt="Exemplo imagem">
-
-> Linha adicional de texto informativo sobre o que o projeto faz. Sua introdução deve ter cerca de 2 ou 3 linhas. Não exagere, as pessoas não vão ler.
+> Sistema de pedidos de um totem de autoatendimento de um fastfood blues burger.
 
 ### Ajustes e melhorias
 
 O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas nas seguintes tarefas:
 
-- [x] Tarefa 1
-- [x] Tarefa 2
-- [x] Tarefa 3
-- [ ] Tarefa 4
-- [ ] Tarefa 5
+- [ ] implementação de clean code
+- [ ] implementaçao de kubernets
 
 ## 💻 Pré-requisitos
 
 Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
-* Você instalou a versão mais recente de `<linguagem / dependência / requeridos>`
-* Você tem uma máquina `<Windows / Linux / Mac>`. Indique qual sistema operacional é compatível / não compatível.
-* Você leu `<guia / link / documentação_relacionada_ao_projeto>`.
+* Você tem uma máquina `<Windows / Linux / Mac>`.
+* Docker 
+* Postman ou insomnia
+* Jdk 11 ou superior 
 
-## 🚀 Instalando <nome_do_projeto>
+## 🚀 Instalando ordering-system
 
-Para instalar o <nome_do_projeto>, siga estas etapas:
+Para instalar o ordering-system, siga estas etapas:
 
-Linux e macOS:
-```
-<comando_de_instalação>
-```
-
-Windows:
-```
-<comando_de_instalação>
-```
-
-## ☕ Usando <nome_do_projeto>
-
-Para usar <nome_do_projeto>, siga estas etapas:
+Clone o projeto com o git 
 
 ```
-<exemplo_de_uso>
+git clone https://github.com/bluesburger/ordering-system.git
+```
+No terminal execute
+```
+docker compose -fdocker-compose.yml up --build
+```
+
+## ☕ Usando ordering-system
+
+Para usar ordering-system, siga estas etapas:
+
+Acesse a documentação do swagger
+
+```
+localhost:8181/swagger-ui.html
+```
+Importa no postman
+
+```
+http://localhost:8181/v2/api-docs
 ```
 
 Adicione comandos de execução e exemplos que você acha que os usuários acharão úteis. Fornece uma referência de opções para pontos de bônus!
 
-## 📫 Contribuindo para <nome_do_projeto>
+## 📫 Contribuindo para ordering-system
 
-Para contribuir com <nome_do_projeto>, siga estas etapas:
+Para contribuir com ordering-system, siga estas etapas:
 
 1. Bifurque este repositório.
 2. Crie um branch: `git checkout -b <nome_branch>`.
@@ -70,4 +68,5 @@ Como alternativa, consulte a documentação do GitHub em [como criar uma solicit
 Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
 
 ## Autores
-Made with by  [Fernando Marques](https://www.linkedin.com/in/fernando-pozo-marques-junior/), [Marlon Silva](https://www.linkedin.com/in/marlon-silva-43075a184/),[Leandro Araújo](https://www.linkedin.com/in/leandroaraujo-sp)
+Made with by  [Fernando Marques](https://www.linkedin.com/in/fernando-pozo-marques-junior/), [Marlon Silva](https://www.linkedin.com/in/marlon-silva-43075a184/),[Leandro Araújo](https://www.linkedin.com/in/leandroaraujo-sp), [Quésia Santos
+](https://www.linkedin.com/in/quesiasts/)
