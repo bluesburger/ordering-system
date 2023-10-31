@@ -10,6 +10,7 @@ public class PaymentCreditCardStrategy implements PaymentStrategy {
 
     @Override
     public String checkoutPayment(Payment payment) {
-        return "Pagamento via cartao de credito realizado com sucesso!";
+        return String.format("Pagamento via cartão de crédito no valor de %.2f" +
+                " foi realizado com sucesso e seu pedido está em preparação", payment.getTotalValue());
     }
 }

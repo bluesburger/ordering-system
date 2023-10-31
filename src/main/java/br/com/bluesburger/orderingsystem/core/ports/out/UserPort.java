@@ -4,7 +4,7 @@ import br.com.bluesburger.orderingsystem.core.domain.User;
 
 public interface UserPort {
 
-   User getUserByCpf(String cpf);
+    User getUserByCpf(String cpf);
 
     User saveUser(User user);
 

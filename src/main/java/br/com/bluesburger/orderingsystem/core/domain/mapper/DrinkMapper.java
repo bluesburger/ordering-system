@@ -9,6 +9,6 @@ import br.com.bluesburger.orderingsystem.core.domain.dto.DrinkDto;
 public class DrinkMapper {
 
 	public DrinkDto toDto(Drink dish) {
-		return new DrinkDto(dish.getId(), dish.getCreatedTime(), dish.getUpdatedTime(), dish.getName());
+		return new DrinkDto(dish.getId(), dish.getCreatedTime(), dish.getUpdatedTime(), dish.getName(), dish.getPrice());
 	}
 }

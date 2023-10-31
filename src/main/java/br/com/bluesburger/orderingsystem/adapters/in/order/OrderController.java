@@ -25,7 +25,7 @@ import br.com.bluesburger.orderingsystem.core.domain.mapper.OrderMapper;
 import br.com.bluesburger.orderingsystem.core.services.OrderService;
 
 @RestController
-@RequestMapping(value = "/api/order")
+@RequestMapping(value = "/api/v1/order")
 public class OrderController {
 	
 	@Autowired
@@ -73,7 +73,15 @@ public class OrderController {
 	@GetMapping("/all/{status}")
 	@ResponseBody
 	public List<OrderDto> getOrderById(@PathVariable OrderStatus status) {
-		return orderService.findAll(status).stream()
+		return orderService.findAllByStatus(status).stream()
+				.map(orderMapper::toDto)
+				.collect(Collectors.toList());
+	}
+
+	@GetMapping("/all")
+	@ResponseBody
+	public List<OrderDto> getAllOrders() {
+		return orderService.findAll().stream()
 				.map(orderMapper::toDto)
 				.collect(Collectors.toList());
 	}

@@ -1,6 +1,7 @@
 package br.com.bluesburger.orderingsystem.core.services.strategies.payment;
 
 import br.com.bluesburger.orderingsystem.core.domain.Payment;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -9,17 +10,18 @@ import java.util.Map;
 import static java.util.Objects.isNull;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentContext {
 
     private Map<PaymentMethodEnum, PaymentStrategy> paymentStrategies;
-    private PaymentPixStrategy paymentPixStrategy;
-    private PaymentDebitCardStrategy paymentDebitCardStrategy;
-    private PaymentCreditCardStrategy paymentCreditCardStrategy;
+    private final PaymentPixStrategy paymentPixStrategy;
+    private final PaymentDebitCardStrategy paymentDebitCardStrategy;
+    private final PaymentCreditCardStrategy paymentCreditCardStrategy;
 
     public String processPayment(Payment payment) {
         buildStrategies();
 
-        PaymentMethodEnum paymentMethod = PaymentMethodEnum.valueOf(payment.getPaymentMethod().toUpperCase());
+        PaymentMethodEnum paymentMethod = PaymentMethodEnum.valueOf(payment.getPaymentMethod().name().toUpperCase());
         PaymentStrategy strategy = paymentStrategies.get(paymentMethod);
 
         if (isNull(strategy)) {

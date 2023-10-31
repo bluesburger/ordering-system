@@ -1,13 +1,10 @@
 package br.com.bluesburger.orderingsystem.core.domain.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -25,4 +22,6 @@ public class DrinkDto implements Serializable {
 	private LocalDateTime updatedTime;
 	
 	private String name;
+
+	private BigDecimal price;
 }

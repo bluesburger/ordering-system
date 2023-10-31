@@ -18,8 +18,9 @@ public class UserPortImpl implements UserPort {
 
     @Override
     public User getUserByCpf(String cpf) {
-        Optional<User> recoveredUser = Optional.ofNullable(userRepository.findUserByCpf(cpf));
-        return recoveredUser.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
+//        Optional<User> recoveredUser = Optional.ofNullable(userRepository.findUserByCpf(cpf));
+//        return recoveredUser.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
+        return userRepository.getUserByCpf(cpf);
     }
 
     @Override

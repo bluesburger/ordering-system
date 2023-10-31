@@ -14,6 +14,7 @@ public class PaymentMapper {
         return Payment.builder()
                 .totalValue(source.getTotalValue())
                 .paymentMethod(source.getPaymentMethod())
+                .order(source.getOrder())
                 .build();
     }
 }

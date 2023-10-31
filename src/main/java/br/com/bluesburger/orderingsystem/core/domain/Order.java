@@ -1,6 +1,7 @@
 package br.com.bluesburger.orderingsystem.core.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import lombok.NonNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -44,6 +46,9 @@ public class Order implements Serializable {
 	
 	@UpdateTimestamp
 	private LocalDateTime updatedTime;
+
+	@NonNull
+	private BigDecimal totalValue;
 
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status = OrderStatus.PEDIDO_REALIZADO;

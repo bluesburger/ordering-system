@@ -5,6 +5,7 @@ import br.com.bluesburger.orderingsystem.core.domain.User;
 import lombok.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,6 +37,9 @@ public class OrderDto implements Serializable {
 
     @NonNull
     private List<DrinkDto> drinks;
+
+    @NonNull
+    private BigDecimal totalValue;
 
     @NonNull
     @Setter

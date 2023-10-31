@@ -6,6 +6,6 @@ import br.com.bluesburger.orderingsystem.core.domain.User;
 
 public interface UserRepository extends JpaRepository<User, String> {
 
-	User findUserByCpf(String cpf);
+	User getUserByCpf(String cpf);
 
 }

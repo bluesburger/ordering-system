@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class PaymentPixStrategy implements PaymentStrategy {
 
     public String checkoutPayment(Payment payment) {
-        return "Pagamento via PIX realizado com sucesso!";
+        return String.format("Pagamento via PIX no valor de %.2f" +
+                " foi realizado com sucesso e seu pedido está em preparação", payment.getTotalValue());
     }
 }

@@ -49,20 +49,18 @@ public class OrderMapper {
 		var drinks = validOrder.getDrinks().stream()
 				.map(drinkMapper::toDto)
 				.collect(Collectors.toList());
-		
-		var orderDto = OrderDto.builder()
+
+		return OrderDto.builder()
 				.id(order.getId())
 				.status(order.getStatus())
 				.createdTime(order.getCreatedTime())
 				.updatedTime(order.getUpdatedTime())
+				.totalValue(order.getTotalValue())
 				.dishes(dishes)
 				.drinks(drinks)
 				.desserts(desserts)
 				.user(order.getUser())
 				.build();
-
-
-		return orderDto;
 	}
 
 	public Order from(OrderDto orderDto) {
