@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.bluesburger.orderingsystem.adapters.in.order.dto.CreateOrderRequest;
-import br.com.bluesburger.orderingsystem.adapters.out.exceptions.OrderNotFoundException;
+import br.com.bluesburger.orderingsystem.adapters.out.OrderNotFoundException;
 import br.com.bluesburger.orderingsystem.core.domain.Order;
 import br.com.bluesburger.orderingsystem.core.domain.OrderStatus;
 import br.com.bluesburger.orderingsystem.core.domain.dto.OrderDto;
