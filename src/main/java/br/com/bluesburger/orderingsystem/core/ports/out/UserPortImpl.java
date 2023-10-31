@@ -1,14 +1,14 @@
 package br.com.bluesburger.orderingsystem.core.ports.out;
 
-import br.com.bluesburger.orderingsystem.adapters.out.repository.UserRepository;
-import br.com.bluesburger.orderingsystem.core.domain.User;
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-import java.util.stream.Collectors;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.UserRepository;
+import br.com.bluesburger.orderingsystem.core.domain.User;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -18,7 +18,7 @@ public class UserPortImpl implements UserPort {
 
     @Override
     public User getUserByCpf(String cpf) {
-        var recoveredUser = userRepository.findUserByCpf(cpf);
+        Optional<User> recoveredUser = Optional.ofNullable(userRepository.findUserByCpf(cpf));
         return recoveredUser.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
     }
 
@@ -29,8 +29,12 @@ public class UserPortImpl implements UserPort {
 
     @Override
     public User updateUserByCpf(User user) {
-        var userRecovery = getUserByCpf(user.getCpf());
-        updateuser(user, userRecovery);
+    	if (user.getCpf() != null) {
+	        var userRecovery = getUserByCpf(user.getCpf());
+	        updateuser(user, userRecovery);
+    	} else {
+    		// TODO: create anonymous user
+    	}
         return userRepository.save(user);
     }
 

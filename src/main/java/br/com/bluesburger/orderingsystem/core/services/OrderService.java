@@ -1,15 +1,11 @@
 package br.com.bluesburger.orderingsystem.core.services;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import br.com.bluesburger.orderingsystem.adapters.out.repository.*;
-import br.com.bluesburger.orderingsystem.core.domain.User;
-import br.com.bluesburger.orderingsystem.core.ports.out.UserPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +13,18 @@ import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DessertNotFound
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DishNotFoundException;
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DrinkNotFoundException;
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.OrderNotFoundException;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.DessertRepository;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.DishRepository;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.DrinkRepository;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.OrderRepository;
 import br.com.bluesburger.orderingsystem.core.domain.Order;
 import br.com.bluesburger.orderingsystem.core.domain.OrderStatus;
+import br.com.bluesburger.orderingsystem.core.domain.User;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DessertDto;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DishDto;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DrinkDto;
 import br.com.bluesburger.orderingsystem.core.domain.valueobject.Cpf;
+import br.com.bluesburger.orderingsystem.core.ports.out.UserPort;
 
 @Service
 @Transactional
@@ -51,7 +53,7 @@ public class OrderService {
 		return orderRepository.save(order);
 	}
 	
-	public Order save(Order order) {
+	public Order save(Order order) {		
 		var user = order.getUser();
 
 
@@ -71,7 +73,8 @@ public class OrderService {
 	public Order createOrder(Cpf cpf, List<DishDto> dishesDto,
 			List<DrinkDto> drinksDto, List<DessertDto> dessertsDto, User user) {
 		var order = new Order();
-		order.setUser(user);;
+		order.setUser(user);
+
 		order.setStatus(OrderStatus.PEDIDO_REALIZADO);
 		
 		var dishes = dishesDto.stream()
