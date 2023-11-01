@@ -7,7 +7,6 @@ import br.com.bluesburger.orderingsystem.core.domain.User;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DessertDto;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DishDto;
 import br.com.bluesburger.orderingsystem.core.domain.dto.DrinkDto;
-import br.com.bluesburger.orderingsystem.core.domain.valueobject.Cpf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +21,6 @@ import lombok.ToString;
 @ToString
 @Getter
 public class CreateOrderRequest {
-	
-	private Cpf cpf;
 	
 	@Setter
 	private OrderStatus status;

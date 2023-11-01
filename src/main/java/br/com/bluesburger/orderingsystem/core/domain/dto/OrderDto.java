@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @RequiredArgsConstructor
 @ToString
 @Getter
@@ -43,6 +45,7 @@ public class OrderDto implements Serializable {
 
     @NonNull
     @Setter
+    @JsonIgnoreProperties("orders")
     private User user;
 
     public String getStatus() {

@@ -18,13 +18,18 @@ services:
       - 33060
     networks:
       - spring-boot-mysql-network
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
   
   application:
     build:
       context: .
       dockerfile: Dockerfile
-    image: amazoncorretto:11-al2023-jdk
-    container_name: application-java
+    image: orderingsystem:0.0.1-SNAPSHOT
+    restart: always
     ports:
       - "8181:8080"
     networks:
@@ -38,7 +43,6 @@ services:
       - SPRING_DATASOURCE_PASSWORD=admin
     volumes:
       - db_app:/var/lib/app
-    command: [ "java", "-jar", "/var/lib/app/orderingsystem-0.0.1-SNAPSHOT.jar" ]
 
 networks:
   spring-boot-mysql-network:

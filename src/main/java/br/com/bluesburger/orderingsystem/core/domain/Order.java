@@ -149,7 +149,7 @@ public class Order implements Serializable {
 	}
 	
 	/**
-	 * Verifica se a reaga status atual é equivalente ao esperado
+	 * Verifica se a reagra de status atual é equivalente ao esperado
 	 * @param target
 	 */
 	private void currentStatusNeedsToBe(OrderStatus target) {

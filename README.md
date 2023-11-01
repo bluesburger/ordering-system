@@ -30,7 +30,7 @@ git clone https://github.com/bluesburger/ordering-system.git
 ```
 No terminal execute
 ```
-docker compose -fdocker-compose.yml up --build
+docker compose -f docker-compose.yml up -d --build
 ```
 
 ## ☕ Usando ordering-system
