@@ -1,23 +1,23 @@
 package br.com.bluesburger.orderingsystem.adapters.in.menu;
 
-import static br.com.bluesburger.orderingsystem.adapters.in.menu.dto.MenuMapper.mapperMenuToMenuResponse;
-import static br.com.bluesburger.orderingsystem.core.domain.factory.UserFactory.buildUser;
-import static java.lang.Character.getNumericValue;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.IntStream;
-
+import br.com.bluesburger.orderingsystem.adapters.in.menu.dto.MenuResponse;
+import br.com.bluesburger.orderingsystem.core.domain.User;
+import br.com.bluesburger.orderingsystem.core.services.MenuService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.bluesburger.orderingsystem.adapters.in.menu.dto.MenuResponse;
-import br.com.bluesburger.orderingsystem.core.domain.User;
-import br.com.bluesburger.orderingsystem.core.services.MenuService;
-import lombok.RequiredArgsConstructor;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.IntStream;
+
+import static br.com.bluesburger.orderingsystem.adapters.in.menu.dto.MenuMapper.mapperMenuToMenuResponse;
+import static br.com.bluesburger.orderingsystem.core.domain.factory.UserFactory.buildUser;
+import static java.lang.Character.getNumericValue;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController()
 @RequiredArgsConstructor
@@ -31,7 +31,10 @@ public class MenuController {
             @RequestParam(name = "cpf_user", required = false) String cpfUSer,
             @RequestParam(name = "user_identified", required = true) String userIdentified) {
 
-        validateCPF(cpfUSer);
+        if (!isBlank(cpfUSer)) {
+            validateCPF(cpfUSer);
+        }
+
         var user = buildUserWithParams(cpfUSer, userIdentified);
         var menu = menuService.processMenu(user);
 
@@ -42,38 +45,37 @@ public class MenuController {
     }
 
     private void validateCPF(String cpf) {
-        if (!cpf.isBlank()) {
-            final var cpfFormated = cpf.replaceAll("\\D", "");
 
-            if (cpfFormated.length() != 11) {
-                throw new IllegalArgumentException("O CPF informado é inválido! pois não possui 11 dígitos");
-            }
+        final var cpfFormated = cpf.replaceAll("\\D", "");
 
-            var sum = IntStream.range(0, 9)
-                    .map(i -> getNumericValue(cpfFormated.charAt(i)) * (10 - i))
-                    .sum();
+        if (cpfFormated.length() != 11) {
+            throw new IllegalArgumentException("O CPF informado é inválido! pois não possui 11 dígitos");
+        }
 
-            var firstVerificationDigit = 11 - (sum % 11);
-            if (firstVerificationDigit >= 10) {
-                firstVerificationDigit = 0;
-            }
+        var sum = IntStream.range(0, 9)
+                .map(i -> getNumericValue(cpfFormated.charAt(i)) * (10 - i))
+                .sum();
 
-            if (getNumericValue(cpfFormated.charAt(9)) != firstVerificationDigit) {
-                throw new IllegalArgumentException("CPF inválido.");
-            }
+        var firstVerificationDigit = 11 - (sum % 11);
+        if (firstVerificationDigit >= 10) {
+            firstVerificationDigit = 0;
+        }
 
-            sum = IntStream.range(0, 10)
-                    .map(i -> getNumericValue(cpfFormated.charAt(i)) * (11 - i))
-                    .sum();
+        if (getNumericValue(cpfFormated.charAt(9)) != firstVerificationDigit) {
+            throw new IllegalArgumentException("CPF inválido.");
+        }
 
-            var secondVerificationDigit = 11 - (sum % 11);
-            if (secondVerificationDigit >= 10) {
-                secondVerificationDigit = 0;
-            }
+        sum = IntStream.range(0, 10)
+                .map(i -> getNumericValue(cpfFormated.charAt(i)) * (11 - i))
+                .sum();
 
-            if (getNumericValue(cpf.charAt(10)) != secondVerificationDigit) {
-                throw new IllegalArgumentException("CPF inválido.");
-            }
+        var secondVerificationDigit = 11 - (sum % 11);
+        if (secondVerificationDigit >= 10) {
+            secondVerificationDigit = 0;
+        }
+
+        if (getNumericValue(cpf.charAt(10)) != secondVerificationDigit) {
+            throw new IllegalArgumentException("CPF inválido.");
         }
     }
 
