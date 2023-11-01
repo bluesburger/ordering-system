@@ -1,6 +1,5 @@
 ### Ordering System 
 
-
 > Sistema de pedidos de um totem de autoatendimento de um fastfood blues burger.
 
 ### Ajustes e melhorias
@@ -42,6 +41,7 @@ Acesse a documentação do swagger
 ```
 localhost:8181/swagger-ui.html
 ```
+
 Importa no postman
 
 ```
@@ -68,5 +68,5 @@ Como alternativa, consulte a documentação do GitHub em [como criar uma solicit
 Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
 
 ## Autores
-Made with by  [Fernando Marques](https://www.linkedin.com/in/fernando-pozo-marques-junior/), [Marlon Silva](https://www.linkedin.com/in/marlon-silva-43075a184/),[Leandro Araújo](https://www.linkedin.com/in/leandroaraujo-sp), [Quésia Santos
+Made with by  [Fernando Marques](https://www.linkedin.com/in/fernando-pozo-marques-junior/), [Marlon Silva](https://www.linkedin.com/in/marlon-silva-43075a184/), [Leandro Araújo](https://www.linkedin.com/in/leandroaraujo-sp), [Quésia Santos
 ](https://www.linkedin.com/in/quesiasts/)

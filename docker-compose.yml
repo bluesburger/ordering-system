@@ -1,8 +1,9 @@
 version: '3.8'
 services:
   dbmysql:
-    image: mysql:8.0
+    image: mysql:latest
     container_name: bdbluesburger
+    command: --skip-name-resolve --host-cache-size=0
     volumes:
       - db_data:/var/lib/mysql
     restart: always
@@ -18,18 +19,13 @@ services:
       - 33060
     networks:
       - spring-boot-mysql-network
-    healthcheck:
-        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-        interval: 30s
-        timeout: 10s
-        retries: 5
-  
+
   application:
     build:
       context: .
       dockerfile: Dockerfile
-    image: orderingsystem:0.0.1-SNAPSHOT
-    restart: always
+    image: amazoncorretto:11-al2023-jdk
+    container_name: application-java
     ports:
       - "8181:8080"
     networks:
@@ -43,6 +39,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=admin
     volumes:
       - db_app:/var/lib/app
+    command: [ "java", "-jar", "/app/orderingsystem-0.0.1-SNAPSHOT.jar" ]
 
 networks:
   spring-boot-mysql-network:
