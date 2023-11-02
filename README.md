@@ -27,7 +27,7 @@ Clone o projeto com o git
 ```
 git clone https://github.com/bluesburger/ordering-system.git
 ```
-No terminal execute
+No terminal execute, importante estar com o docker aberto para que o comando possa ser executado
 ```
 docker compose -f docker-compose.yml up -d --build
 ```
@@ -42,13 +42,11 @@ Acesse a documentação do swagger
 localhost:8181/swagger-ui.html
 ```
 
-Importa no postman
+Importe o link no postman, quando adicionado coloque o localhost e a porta 8181
 
 ```
 http://localhost:8181/v2/api-docs
 ```
-
-Adicione comandos de execução e exemplos que você acha que os usuários acharão úteis. Fornece uma referência de opções para pontos de bônus!
 
 ## 📫 Contribuindo para ordering-system
 
