@@ -48,6 +48,11 @@ Importe o link no postman, quando adicionado coloque o localhost e a porta 8181
 http://localhost:8181/v2/api-docs
 ```
 
+Na documentação em Api voce encontrara exemplos de Json para utilizar no postman
+
+```
+https://bluesburguer.notion.site/Blues-Burger-ddf1fe9e62894a16aa402605b93a9fcc?pvs=4
+```
 ## 📫 Contribuindo para ordering-system
 
 Para contribuir com ordering-system, siga estas etapas:
