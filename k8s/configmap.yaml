@@ -7,9 +7,4 @@ metadata:
 data:
   SPRING_PROFILES_ACTIVE: dev
   SPRING_DATASOURCE_URL: jdbc:mysql://svc-ordering-system-database/dbbluesburger
-  SPRING_DATASOURCE_USERNAME: admin
-  SPRING_DATASOURCE_PASSWORD: admin
-  MYSQL_ROOT_PASSWORD: "123456"
   MYSQL_DATABASE: dbbluesburger
-  MYSQL_USER: admin
-  MYSQL_PASSWORD: admin

@@ -13,8 +13,8 @@ spec:
       env:
       - name: MYSQL_ROOT_PASSWORD
         valueFrom:
-          configMapKeyRef:
-            name: db-config
+          secretKeyRef:
+            name: ordering-system-opaque
             key: MYSQL_ROOT_PASSWORD
       - name: MYSQL_DATABASE
         valueFrom:
@@ -23,11 +23,11 @@ spec:
             key: MYSQL_DATABASE
       - name: MYSQL_USER
         valueFrom:
-          configMapKeyRef:
-            name: db-config
+          secretKeyRef:
+            name: ordering-system-opaque
             key: MYSQL_USER
       - name: MYSQL_PASSWORD
         valueFrom:
-          configMapKeyRef:
-            name: db-config
+          secretKeyRef:
+            name: ordering-system-opaque
             key: MYSQL_PASSWORD
