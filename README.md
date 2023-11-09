@@ -37,6 +37,7 @@ Ou para rodar no **Kubernetes** siga as seguintes etapas:
 
 No terminal execute
 ```
+kubectl apply -f .\k8s\configmap.yaml
 kubectl apply -f .\k8s\ordering-system-database.yml
 kubectl apply -f .\k8s\svc-ordering-database.yml
 kubectl apply -f .\k8s\ordering-system-api.yml

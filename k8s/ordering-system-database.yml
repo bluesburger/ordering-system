@@ -12,10 +12,22 @@ spec:
         - containerPort: 3306
       env:
       - name: MYSQL_ROOT_PASSWORD
-        value: "123456"
+        valueFrom:
+          configMapKeyRef:
+            name: db-config
+            key: MYSQL_ROOT_PASSWORD
       - name: MYSQL_DATABASE
-        value: "dbbluesburger"
+        valueFrom:
+          configMapKeyRef:
+            name: db-config
+            key: MYSQL_DATABASE
       - name: MYSQL_USER
-        value: "admin"
+        valueFrom:
+          configMapKeyRef:
+            name: db-config
+            key: MYSQL_USER
       - name: MYSQL_PASSWORD
-        value: "admin"
+        valueFrom:
+          configMapKeyRef:
+            name: db-config
+            key: MYSQL_PASSWORD
