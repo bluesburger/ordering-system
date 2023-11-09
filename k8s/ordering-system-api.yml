@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ordering-system-api
+  labels:
+    app: ordering-system-api-order
+spec:
+  containers:
+    - name: orderingsystem
+      image: leandroaraujosp/orderingsystem:0.0.1-SNAPSHOT
+      ports:
+        - containerPort: 8080
+      env:
+      - name: SPRING_PROFILES_ACTIVE
+        value: "dev"
+      - name: SPRING_DATASOURCE_URL
+        value: "jdbc:mysql://svc-ordering-system-database/dbbluesburger"
+      - name: SPRING_DATASOURCE_USERNAME
+        value: "admin"
+      - name: SPRING_DATASOURCE_PASSWORD
+        value: "admin"

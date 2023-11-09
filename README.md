@@ -33,6 +33,26 @@ No terminal execute
 docker compose -f docker-compose.yml up -d --build
 ```
 
+Ou para rodar no **Kubernetes** siga as seguintes etapas:
+
+No terminal execute
+```
+kubectl apply -f .\k8s\ordering-system-database.yml
+kubectl apply -f .\k8s\svc-ordering-database.yml
+kubectl apply -f .\k8s\ordering-system-api.yml
+kubectl apply -f .\k8s\svc-ordering-system.yml  
+```
+
+Para conferir que os pods estão rodando execute no terminal
+```
+kubectl get pods
+```
+
+E para conferir que as services estão rodando, execute no terminal
+```
+kubectl get svc
+```
+
 ## ☕ Usando ordering-system
 
 Para usar ordering-system, siga estas etapas:
