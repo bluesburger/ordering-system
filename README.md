@@ -37,12 +37,21 @@ Ou para rodar no **Kubernetes** siga as seguintes etapas:
 
 No terminal execute
 ```
-kubectl apply -f .\k8s\configmap.yaml
-kubectl apply -f .\k8s\opaque-secrets.yaml
-kubectl apply -f .\k8s\ordering-system-database.yml
-kubectl apply -f .\k8s\svc-ordering-database.yml
-kubectl apply -f .\k8s\ordering-system-api.yml
-kubectl apply -f .\k8s\svc-ordering-system.yml  
+kubectl apply -f .\k8s\base\configmap.yml
+kubectl apply -f .\k8s\base\secrets-opaque.yml
+kubectl apply -f .\k8s\base\metrics.yml
+
+kubectl apply -f .\k8s\volumes\ordering-system-pv.yml
+kubectl apply -f .\k8s\volumes\ordering-system-pvc.yml
+
+kubectl apply -f .\k8s\pods\ordering-system-database.yml
+kubectl apply -f .\k8s\svc\svc-ordering-database.yml
+
+kubectl apply -f .\k8s\deployment-ordering-system-api.yml
+
+kubectl apply -f .\k8s\svc\svc-ordering-api.yml
+
+kubectl apply -f .\k8s\hpa-ordering-system-api.yml
 ```
 
 Para conferir que os pods estão rodando execute no terminal
