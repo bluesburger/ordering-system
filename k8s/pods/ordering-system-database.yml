@@ -36,5 +36,5 @@ spec:
             key: MYSQL_PASSWORD
   volumes:
     - name: database
-      hostPath:
-        path: /run/desktop/mnt/host/d/_development/postech/ordering-system/volumes/data
+      persistentVolumeClaim:
+        claimName: ordering-system-database-pvc
