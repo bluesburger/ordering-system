@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ordering-system-api-deployment
+  labels:
+    app: ordering-system-api-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ordering-system-api-deployment
+  template:
+    metadata:
+      name: ordering-system-api-deployment
+      labels:
+        app: ordering-system-api-deployment
+    spec:
+      containers:
+        - name: c-orderingsystemapi-deployment
+          image: leandroaraujosp/orderingsystem:0.0.1-SNAPSHOT
+          ports:
+            - containerPort: 8080
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            valueFrom:
+              configMapKeyRef:
+                name: db-config
+                key: SPRING_PROFILES_ACTIVE
+          - name: SPRING_DATASOURCE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: db-config
+                key: SPRING_DATASOURCE_URL
+          - name: SPRING_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: ordering-system-opaque
+                key: SPRING_DATASOURCE_USERNAME
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ordering-system-opaque
+                key: SPRING_DATASOURCE_PASSWORD
