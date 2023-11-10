@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ordering-system-api-deployment
+  name: ordering-system-api
   labels:
-    app: ordering-system-api-deployment
+    app: ordering-system-api-order
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: ordering-system-api-deployment
+      app: ordering-system-api-order
   template:
     metadata:
-      name: ordering-system-api-deployment
+      name: ordering-system-api
       labels:
-        app: ordering-system-api-deployment
+        app: ordering-system-api-order
     spec:
       containers:
-        - name: c-orderingsystemapi-deployment
+        - name: orderingsystem
           image: leandroaraujosp/orderingsystem:0.0.1-SNAPSHOT
           ports:
             - containerPort: 8080
