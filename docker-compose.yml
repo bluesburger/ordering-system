@@ -28,7 +28,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: orderingsystem:0.0.1-SNAPSHOT
+    image: leandroaraujosp/orderingsystem:0.0.1-SNAPSHOT
     restart: always
     ports:
       - "8181:8080"
