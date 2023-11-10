@@ -9,6 +9,7 @@ spec:
     storage: 200Mi
   accessModes:
     - ReadWriteMany
+  storageClassName: local-storage
   persistentVolumeReclaimPolicy: Retain
   hostPath:
         path: /run/desktop/mnt/host/d/_development/postech/ordering-system/volumes/data
