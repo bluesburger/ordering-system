@@ -35,7 +35,8 @@ services:
     networks:
       - spring-boot-mysql-network
     depends_on:
-      - dbmysql
+      dbmysql:
+        condition: service_healthy
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - SPRING_DATASOURCE_URL=jdbc:mysql://dbmysql:3306/dbbluesburger
