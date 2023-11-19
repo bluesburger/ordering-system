@@ -52,6 +52,13 @@ kubectl apply -f .\k8s\deployment-ordering-system-api.yml
 kubectl apply -f .\k8s\svc\svc-ordering-api.yml
 
 kubectl apply -f .\k8s\hpa-ordering-system-api.yml
+
+kubectl apply -f .\k8s\observability\efk\elastic\elastic-service.yml
+kubectl apply -f .\k8s\observability\efk\elastic\elastic-pod.yml
+kubectl apply -f .\k8s\observability\efk\fluentd\fluent-configmap.yml
+kubectl apply -f .\k8s\observability\efk\fluentd\fluent-pod.yml
+kubectl apply -f .\k8s\observability\efk\kibana\kibana-service.yml
+kubectl apply -f .\k8s\observability\efk\kibana\kibana-pod.yml
 ```
 
 Para conferir que os pods estão rodando execute no terminal
