@@ -5,7 +5,7 @@ metadata:
   labels:
     app: ordering-system-api-order
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: ordering-system-api-order
@@ -42,7 +42,11 @@ spec:
             periodSeconds: 30
           resources:
             requests:
-              cpu: 1m
+              memory: "400Mi"
+              cpu: 250m
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
           env:
           - name: SPRING_PROFILES_ACTIVE
             valueFrom:

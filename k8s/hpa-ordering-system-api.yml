@@ -8,7 +8,10 @@ spec:
     kind: Deployment
     name: ordering-system-api
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 3
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 60
   metrics:
     - type: Resource
       resource:
