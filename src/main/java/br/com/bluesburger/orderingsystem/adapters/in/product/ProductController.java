@@ -48,12 +48,12 @@ public class ProductController {
 			case DESSERT: {
 				return dessertService.listAll().stream()
 						.map(dessert -> dessertMapper.toDto(dessert))
-						.toList();
+						.collect(Collectors.toList());
 			}
 			case DISH: {
 				return dishService.listAll().stream()
 						.map(dishMapper::toDto)
-						.toList();
+						.collect(Collectors.toList());
 			}
 			case DRINK: {
 				return drinkService.listAll().stream()
