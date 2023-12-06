@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bluesburguer
+  labels:
+    app: bluesburguer
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bluesburguer
+  template:
+    metadata:
+      labels:
+        app: bluesburguer
+    spec:
+      containers:
+        - name: bluesburguer-api
+          image: fernandomqs/ordering-system
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: SPRING_PROFILES_ACTIVE
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dados
+                  key: SPRING_DATASOURCE_PASSWORD
