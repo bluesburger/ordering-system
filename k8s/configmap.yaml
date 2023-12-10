@@ -6,3 +6,4 @@ data:
   SPRING_PROFILES_ACTIVE: "dev"
   SPRING_DATASOURCE_URL: "jdbc:mysql://dbmysql:3306/dbbluesburger"
   SPRING_DATASOURCE_USERNAME: "admin"
+  DB_DATABASE: "dbbluesburger"
