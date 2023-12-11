@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: bluesburguer-api
-          image: fernandomqs/ordering-system
+          image: fernandomqs/ordering-system:1.0
           ports:
             - containerPort: 8080
           env:
