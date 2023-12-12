@@ -1,3 +1,4 @@
+#Service que expoe mysql para outros services
 apiVersion: v1
 kind: Service
 metadata:
@@ -43,11 +44,21 @@ spec:
                 configMapKeyRef:
                   name: dados
                   key: DB_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: MYSQL_USER
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: senhas
                   key: DB_PASSWORD
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: senhas
+                  key: MYSQL_PASSWORD
           volumeMounts:
             - name: mysql-ps
               mountPath: /var/lib/mysql

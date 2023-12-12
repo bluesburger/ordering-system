@@ -4,6 +4,7 @@ metadata:
   name: dados
 data:
   SPRING_PROFILES_ACTIVE: "dev"
-  SPRING_DATASOURCE_URL: "jdbc:mysql://dbmysql:3306/dbbluesburger"
-  SPRING_DATASOURCE_USERNAME: "admin"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/dbbluesburger"
+  SPRING_DATASOURCE_USERNAME: "root"
   DB_DATABASE: "dbbluesburger"
+  MYSQL_USER: "admin"
