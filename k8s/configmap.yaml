@@ -3,8 +3,9 @@ kind: ConfigMap
 metadata:
   name: dados
 data:
+  host: "mysql"
+  dbName: "dbbluesburger"
+#  MYSQL_USER: "admin"
   SPRING_PROFILES_ACTIVE: "dev"
   SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/dbbluesburger"
   SPRING_DATASOURCE_USERNAME: "root"
-  DB_DATABASE: "dbbluesburger"
-  MYSQL_USER: "admin"

@@ -20,6 +20,27 @@ spec:
           ports:
             - containerPort: 8080
           env:
+            - name: DB_HOST   # Setting Database host address from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: host
+            - name: DB_NAME  # Setting Database name from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: dbName
+            - name: DB_USERNAME  # Setting Database username from Secret
+              valueFrom:
+                secretKeyRef:
+                  name: senhas
+                  key: username
+            - name: DB_PASSWORD # Setting Database password from Secret
+              valueFrom:
+                secretKeyRef:
+                  name: senhas
+                  key: password
+
             - name: SPRING_PROFILES_ACTIVE
               valueFrom:
                 configMapKeyRef:
@@ -40,13 +61,4 @@ spec:
                 secretKeyRef:
                   name: senhas
                   key: SPRING_DATASOURCE_PASSWORD
-            - name: DB_DATABASE
-              valueFrom:
-                configMapKeyRef:
-                  name: dados
-                  key: DB_DATABASE
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: senhas
-                  key: DB_PASSWORD
+
