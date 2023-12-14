@@ -63,7 +63,7 @@ spec:
                   key: SPRING_DATASOURCE_PASSWORD
           livenessProbe:
             httpGet:
-              path: /api/v1/menu
+              path: /swagger-ui/
               port: 8080
             initialDelaySeconds: 180
             periodSeconds: 5
