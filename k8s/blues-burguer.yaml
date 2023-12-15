@@ -56,6 +56,11 @@ spec:
                 configMapKeyRef:
                   name: dados
                   key: SPRING_DATASOURCE_USERNAME
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: REDIS_HOST
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -67,3 +72,10 @@ spec:
               port: 8080
             initialDelaySeconds: 180
             periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /swagger-ui/
+            periodSeconds: 10
+            failureThreshold: 5
+            initialDelaySeconds: 60
