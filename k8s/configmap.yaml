@@ -9,4 +9,4 @@ data:
   SPRING_PROFILES_ACTIVE: "dev"
   SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/dbbluesburger"
   SPRING_DATASOURCE_USERNAME: "root"
-  REDIS_HOST: "my-release-redis-master-0.my-release-redis-headless.default.svc.cluster.local"
+#  REDIS_HOST: "my-release-redis-master-0.my-release-redis-headless.default.svc.cluster.local"
