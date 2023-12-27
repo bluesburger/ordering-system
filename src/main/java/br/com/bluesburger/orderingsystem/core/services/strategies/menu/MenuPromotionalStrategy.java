@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 import static br.com.bluesburger.orderingsystem.core.domain.factory.MenuFactory.buildMenu;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class MenuPromotionalStrategy implements MenuStrategy {
 
     private final DishRepository dishRepository;
@@ -25,21 +25,23 @@ public class MenuPromotionalStrategy implements MenuStrategy {
 
     @Override
     public Menu showMenu(User user) {
-        final var dishList = dishRepository.findAll();
-        final var drinkList = drinkRepository.findAll();
-        final var dessertList = dessertRepository.findAll();
+        try {
+            final var dishList = dishRepository.findAll();
+            final var drinkList = drinkRepository.findAll();
+            final var dessertList = dessertRepository.findAll();
 
-        var menu = buildMenu(dishList, drinkList, dessertList);
-        final var ordersUser = orderPort.getOrdersByUser(user);
+            var menu = buildMenu(dishList, drinkList, dessertList);
+            final var ordersUser = orderPort.getOrdersByUser(user);
 
-        applyDiscounts(menu, ordersUser);
+            applyDiscounts(menu, ordersUser);
 
-        return menu;
+            return menu;
+        } catch (Exception exception) {
+            throw new RuntimeException("Ocorreu algum erro na busca dos produtos no banco de dados");
+        }
     }
 
     private void applyDiscounts(Menu menuDefault, List<Order> ordersUser) {
-
-
         applyDiscountDishes(menuDefault.getDishes(), ordersUser);
         applyDiscountDrinks(menuDefault.getDrinks(), ordersUser);
         applyDiscountDesserts(menuDefault.getDesserts(), ordersUser);

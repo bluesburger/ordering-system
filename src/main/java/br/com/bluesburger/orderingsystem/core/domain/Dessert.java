@@ -10,23 +10,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Entity(name = "dessert")
 @Data
 @Getter
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Dessert implements Serializable {
 
 	private static final long serialVersionUID = -4705493288584213744L;

@@ -20,10 +20,15 @@ public class MenuDefaultStrategy implements MenuStrategy {
 
     @Override
     public Menu showMenu(User user) {
-        final var dishList = dishRepository.findAll();
-        final var drinkList = drinkRepository.findAll();
-        final var dessertList = dessertRepository.findAll();
+        try {
+            final var dishList = dishRepository.findAll();
+            final var drinkList = drinkRepository.findAll();
+            final var dessertList = dessertRepository.findAll();
 
-        return buildMenu(dishList, drinkList, dessertList);
+            return buildMenu(dishList, drinkList, dessertList);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Ocorreu algum erro na busca dos produtos no banco de dados");
+        }
     }
 }

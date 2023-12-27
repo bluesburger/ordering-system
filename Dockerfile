@@ -9,7 +9,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Compilando o aplicativo e gerando o arquivo JAR
-RUN mvn clean install -DskipTests=true
+RUN mvn -DskipTests clean package
 
 # Usando a imagem do Amazon Corretto para executar o aplicativo
 FROM amazoncorretto:11-al2023-jdk
