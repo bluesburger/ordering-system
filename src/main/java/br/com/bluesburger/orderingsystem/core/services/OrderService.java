@@ -73,7 +73,11 @@ public class OrderService {
         var userValidate = userService.validateUser(user);
         order.setUser(userValidate);
 
-        order.setStatus(OrderStatus.PEDIDO_REALIZADO);
+        order.setStatus(OrderStatus.PEDIDO_PRONTO);
+
+        order.setStatus(OrderStatus.PEDIDO_EM_PREPARACAO);
+
+        order.setStatus(OrderStatus.PEDIDO_RECEBIDO);
 
         var dishes = dishesDto.stream()
                 .map(DishDto::getId)
