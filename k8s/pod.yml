@@ -14,21 +14,21 @@ spec:
         httpGet:
           path: /api/v1/order/all/PREPARO_INICIADO
           port: 8080
-        initialDelaySeconds: 30
+        initialDelaySeconds: 600
         failureThreshold: 3
         periodSeconds: 30
       startupProbe:
         httpGet:
           path: /api/v1/order/all/PREPARO_INICIADO
           port: 8080
-        initialDelaySeconds: 30
+        initialDelaySeconds: 600
         failureThreshold: 6
         periodSeconds: 30
       livenessProbe:
         httpGet:
           path: /api/v1/order/all/PREPARO_INICIADO
           port: 8080
-        initialDelaySeconds: 30
+        initialDelaySeconds: 600
         periodSeconds: 30
       env:
       - name: SPRING_PROFILES_ACTIVE

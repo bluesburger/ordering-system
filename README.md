@@ -7,7 +7,7 @@
 O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas nas seguintes tarefas:
 
 - [ ] implementação de clean code
-- [ ] implementaçao de kubernets
+- [ ] implementaçao de kubernetes
 
 ## 💻 Pré-requisitos
 
@@ -32,65 +32,52 @@ No terminal execute, importante estar com o docker aberto para que o comando pos
 docker compose -f docker-compose.yml up -d --build
 ```
 
-Ou para rodar no **Kubernetes** siga as seguintes etapas:
 
-No terminal execute
-```
-kubectl apply -f .\k8s\base\configmap.yml
-kubectl apply -f .\k8s\base\secrets-opaque.yml
-kubectl apply -f .\k8s\base\metrics.yml
+## <img src="https://github.com/kubernetes/kubernetes/raw/master/logo/logo.png" width="30"> Rodando o projeto no Kubernetes
 
-kubectl apply -f .\k8s\volumes\ordering-system-pv.yml
-kubectl apply -f .\k8s\volumes\ordering-system-pvc.yml
+Para rodar no **Kubernetes** siga as seguintes etapas:
 
-kubectl apply -f .\k8s\pods\ordering-system-database.yml
-kubectl apply -f .\k8s\svc\svc-ordering-database.yml
-
-kubectl apply -f .\k8s\deployment-ordering-system-api.yml
-
-kubectl apply -f .\k8s\svc\svc-ordering-api.yml
-
-kubectl apply -f .\k8s\hpa-ordering-system-api.yml
-
-kubectl apply -f .\k8s\observability\efk\elastic\elastic-service.yml
-kubectl apply -f .\k8s\observability\efk\elastic\elastic-pod.yml
-kubectl apply -f .\k8s\observability\efk\fluentd\fluent-configmap.yml
-kubectl apply -f .\k8s\observability\efk\fluentd\fluent-pod.yml
-kubectl apply -f .\k8s\observability\efk\kibana\kibana-service.yml
-kubectl apply -f .\k8s\observability\efk\kibana\kibana-pod.yml
+No terminal baixe o instalador do minikube:
+```powershell
+New-Item -Path 'c:\' -Name 'minikube' -ItemType Directory -Force
+Invoke-WebRequest -OutFile 'c:\minikube\minikube.exe' -Uri 'https://github.com/kubernetes/minikube/releases/latest/download/minikube-windows-amd64.exe' -UseBasicParsing
 ```
 
-Para conferir que os pods estão rodando execute no terminal
-```
-kubectl get pods
+Se preciso, adicione o caminho do arquivo binário no arquivo PATH
+
+Inicie o minikube
+```shell
+minikube start
 ```
 
-E para conferir que as services estão rodando, execute no terminal
+Aplique as configurações da aplicação no K8S
+```shell
+minikube kubectl -- apply -f .\k8s
 ```
-kubectl get svc
+
+Para conferir que tudo está rodando de acordo, visualize o dashboard em um navegador
+```shell
+minikube dashboard
+```
+
+Para utilizar a API, execute o redirecionamento de portas no minikube, necessário para a utilização da API na máquina host:
+```shell
+minikube kubectl -- port-forward ordering-system-api 8181:8080
 ```
 
 ## ☕ Usando ordering-system
 
 Para usar ordering-system, siga estas etapas:
 
-Acesse a documentação do swagger
+Acesse a documentação do swagger em http://localhost:8181/swagger-ui.html
 
-```
-localhost:8181/swagger-ui.html
-```
-
-Importe o link no postman, quando adicionado coloque o localhost e a porta 8181
-
-```
-http://localhost:8181/v2/api-docs
-```
+Importe o link no postman, quando adicionado coloque o localhost e a porta 8181: http://localhost:8181/v2/api-docs
 
 Na documentação em Api voce encontrara exemplos de Json para utilizar no postman
 
-```
 https://bluesburguer.notion.site/Blues-Burger-ddf1fe9e62894a16aa402605b93a9fcc?pvs=4
-```
+
+
 ## 📫 Contribuindo para ordering-system
 
 Para contribuir com ordering-system, siga estas etapas:
