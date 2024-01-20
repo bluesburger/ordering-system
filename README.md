@@ -72,6 +72,11 @@ Para utilizar a API, execute o redirecionamento de portas no minikube, necessár
 minikube kubectl -- port-forward ordering-system-api 8181:8080
 ```
 
+Após a utilização, caso deseje remover todas as configurações da aplicação, poderá executar:
+```shell
+ minikube kubectl -- delete -f .\k8s\
+```
+
 ## ☕ Usando ordering-system
 
 Para usar ordering-system, siga estas etapas:
