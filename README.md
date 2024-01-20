@@ -27,7 +27,13 @@ Clone o projeto com o git
 ```
 git clone https://github.com/bluesburger/ordering-system.git
 ```
-No terminal execute, importante estar com o docker aberto para que o comando possa ser executado
+
+Instale e inicie o docker no seu sistema operacional: https://docs.docker.com/engine/install/
+
+Acesse o diretório da aplicação
+
+
+## Rodando o projeto localmente
 ```
 docker compose -f docker-compose.yml up -d --build
 ```
@@ -37,15 +43,10 @@ docker compose -f docker-compose.yml up -d --build
 
 Para rodar no **Kubernetes** siga as seguintes etapas:
 
-No terminal baixe o instalador do minikube:
-```powershell
-New-Item -Path 'c:\' -Name 'minikube' -ItemType Directory -Force
-Invoke-WebRequest -OutFile 'c:\minikube\minikube.exe' -Uri 'https://github.com/kubernetes/minikube/releases/latest/download/minikube-windows-amd64.exe' -UseBasicParsing
-```
+Instale o minikube de acordo com o manual oficial, e conforme o seu sistema operacional: https://minikube.sigs.k8s.io/docs/start/
+> Caso haja uma instalação do Docker Desktop, deve ser interrompida para não conflitar com o minikube
 
-Se preciso, adicione o caminho do arquivo binário no arquivo PATH
-
-Inicie o minikube
+Após instalado, inicie o minikube
 ```shell
 minikube start
 ```
@@ -55,9 +56,15 @@ Aplique as configurações da aplicação no K8S
 minikube kubectl -- apply -f .\k8s
 ```
 
-Para conferir que tudo está rodando de acordo, visualize o dashboard em um navegador
+Para conferir que tudo está rodando de acordo, execute o seguinte comando em um terminal para visualizar o dashboard em um navegador. A inicialização deve levar de 5 a 10 minutos:
 ```shell
 minikube dashboard
+```
+
+A instalação deve levar de 5 a 10 minutos para ficar pronta para utilização.
+Caso deseje acompanhar os logs da aplicação principal, execute o seguinte comando em um terminal:
+```shell
+minikube kubectl -- logs -f ordering-system-api
 ```
 
 Para utilizar a API, execute o redirecionamento de portas no minikube, necessário para a utilização da API na máquina host:
