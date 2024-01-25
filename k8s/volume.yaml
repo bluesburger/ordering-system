@@ -18,7 +18,25 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: csi-hostpath-sc
-provisioner: docker.io/hostpath
-reclaimPolicy: Delete
-volumeBindingMode: Immediate
+provisioner: docker.io/no-provisioner
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: false
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-mysql
+  labels:
+    app: mysql
+    tier: database
+spec:
+  capacity:
+    storage: 15Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/run/desktop/mnt/host/d/_development/postech/ordering-system/volumes/data"
+  storageClassName: csi-hostpath-sc
+  persistentVolumeReclaimPolicy: Retain
