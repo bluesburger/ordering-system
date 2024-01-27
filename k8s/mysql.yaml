@@ -10,10 +10,10 @@ spec:
   ports:
     - port: 3306
       targetPort: 3306
-  selector:       # mysql Pod Should contain same labels
+  selector:
     app: mysql
     tier: database
-  clusterIP: None  # We Use DNS, Thus ClusterIP is not relevant
+  clusterIP: None
 ---
 
 apiVersion: apps/v1
