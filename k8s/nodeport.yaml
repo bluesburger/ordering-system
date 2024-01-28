@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: bluesburguer-api
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: bluesburguer
   ports:

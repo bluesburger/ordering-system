@@ -65,6 +65,25 @@ Para contribuir com ordering-system, siga estas etapas:
 
 Como alternativa, consulte a documentação do GitHub em [como criar uma solicitação pull](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
+## 🚀 Intalar na aws
+
+Acesse o projeto com o cli da aws, então execute o comando:
+
+```
+kubectl apply -f k8s/
+```
+
+apos subir as pastas execute 
+
+```
+kubectl get svc
+```
+
+Pega o campo EXTERNAL-IP e adicona a porta 8080. conforme exemplo
+```
+a0ec86b1948d4426085d75886ae73dce-1762434556.us-east-1.elb.amazonaws.com:8080
+```
+agora e so colar no seu navegador de preferencia
 
 ## 📝 Licença
 

@@ -7,13 +7,13 @@ metadata:
     app: mysql
     tier: database
 spec:
+  type: LoadBalancer
   ports:
     - port: 3306
       targetPort: 3306
   selector:
     app: mysql
     tier: database
-  clusterIP: None
 ---
 
 apiVersion: apps/v1
@@ -71,5 +71,5 @@ spec:
               mountPath: /var/lib/mysql
       volumes:
         - name: mysql-persistent-storage
-          persistentVolumeClaim:
-            claimName: volume-mysql
+          #persistentVolumeClaim:
+            #claimName: volume-mysql
