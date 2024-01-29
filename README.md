@@ -76,9 +76,9 @@ kubectl delete -f .\k8s\
 
 Para usar ordering-system, siga estas etapas:
 
-Acesse a documentação do swagger em http://localhost:8181/swagger-ui.html
+Acesse a documentação do swagger em http://localhost:30000/swagger-ui.html
 
-Importe o link no postman, quando adicionado coloque o localhost e a porta 8181: http://localhost:8181/v2/api-docs
+Importe o link no postman, quando adicionado coloque o localhost e a porta 30000: http://localhost:30000/v2/api-docs
 
 Na documentação em Api voce encontrara exemplos de Json para utilizar no postman
 
