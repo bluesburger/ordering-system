@@ -24,7 +24,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: fernandomqs/ordering-system:2.0
+    image: fernandomqs/ordering-system:2.1
     container_name: application-java
     ports:
       - "30000:8080"
