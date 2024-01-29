@@ -9,7 +9,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: dbbluesburger
+      MYSQL_DATABASE: bluesburger
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
     ports:
@@ -24,17 +24,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: amazoncorretto:11-al2023-jdk
+    image: fernandomqs/ordering-system:2.1
     container_name: application-java
     ports:
-      - "8181:8080"
+      - "30000:8080"
     networks:
       - spring-boot-mysql-network
     depends_on:
       - dbmysql
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_DATASOURCE_URL=jdbc:mysql://dbmysql:3306/dbbluesburger
+      - SPRING_DATASOURCE_URL=jdbc:mysql://dbmysql:3306/bluesburger
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
     volumes:
