@@ -2,7 +2,8 @@ package br.com.bluesburger.orderingsystem.adapters.in.payment;
 
 import br.com.bluesburger.orderingsystem.adapters.in.payment.dto.PaymentRequest;
 import br.com.bluesburger.orderingsystem.adapters.in.payment.dto.PaymentResponse;
-import br.com.bluesburger.orderingsystem.core.ports.out.PaymentPort;
+import br.com.bluesburger.orderingsystem.ports.in.PaymentProcessingServicePort;
+import br.com.bluesburger.orderingsystem.core.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,16 +19,18 @@ import static br.com.bluesburger.orderingsystem.adapters.in.payment.dto.PaymentM
 @RequestMapping("/api/v1")
 public class PaymentController {
 
-    private final PaymentPort paymentPort;
+    private final OrderService orderService;
+    private final PaymentProcessingServicePort paymentPort;
 
     @PostMapping("/payment")
     public ResponseEntity<PaymentResponse> makePayment(@RequestBody PaymentRequest paymentRequest) {
-
         var payment = mapperPaymentRequestToPayment(paymentRequest);
+        final var order = orderService.getOrderById(payment.getOrder().getId());
+        payment.completeOrder(order);
 
         final var paymentProcessed = paymentPort.processPayment(payment);
-        var paymentResponse = mapperPaymentToPaymentResponse(paymentProcessed);
 
+        var paymentResponse = mapperPaymentToPaymentResponse(paymentProcessed);
         return ResponseEntity.ok(paymentResponse);
     }
 

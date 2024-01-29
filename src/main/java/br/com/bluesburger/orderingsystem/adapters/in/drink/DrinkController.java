@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DrinkNotFoundException;
-import br.com.bluesburger.orderingsystem.core.domain.dto.DrinkDto;
-import br.com.bluesburger.orderingsystem.core.domain.mapper.DrinkMapper;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.request.DrinkRequest;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.mapper.DrinkMapper;
 import br.com.bluesburger.orderingsystem.core.services.DrinkService;
 
 @RestController
@@ -27,7 +27,7 @@ public class DrinkController {
 	
 	@GetMapping
 	@ResponseBody
-	public List<DrinkDto> listAll() {
+	public List<DrinkRequest> listAll() {
 		return drinkService.listAll().stream()
 				.map(drinkMapper::toDto)
 				.collect(Collectors.toList());
@@ -35,7 +35,7 @@ public class DrinkController {
 	
 	@GetMapping("/{drinkId}")
 	@ResponseBody
-	public DrinkDto getDishById(@PathVariable Long drinkId) {
+	public DrinkRequest getDishById(@PathVariable Long drinkId) {
 		var drink = drinkService.getById(drinkId).orElseThrow(DrinkNotFoundException::new);
 		return drinkMapper.toDto(drink);
 	}

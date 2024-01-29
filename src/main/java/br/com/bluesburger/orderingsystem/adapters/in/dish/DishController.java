@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DishNotFoundException;
-import br.com.bluesburger.orderingsystem.core.domain.dto.DishDto;
-import br.com.bluesburger.orderingsystem.core.domain.mapper.DishMapper;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.request.DishRequest;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.mapper.DishMapper;
 import br.com.bluesburger.orderingsystem.core.services.DishService;
 
 @RestController
@@ -27,7 +27,7 @@ public class DishController {
 	
 	@GetMapping
 	@ResponseBody
-	public List<DishDto> listAll() {
+	public List<DishRequest> listAll() {
 		return dishService.listAll().stream()
 				.map(dishMapper::toDto)
 				.collect(Collectors.toList());
@@ -35,7 +35,7 @@ public class DishController {
 	
 	@GetMapping("/{dishId}")
 	@ResponseBody
-	public DishDto getDishById(@PathVariable Long dishId) {
+	public DishRequest getDishById(@PathVariable Long dishId) {
 		var dish = dishService.getById(dishId).orElseThrow(DishNotFoundException::new);
 		return dishMapper.toDto(dish);
 	}

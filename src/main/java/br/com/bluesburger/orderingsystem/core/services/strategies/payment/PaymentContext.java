@@ -18,7 +18,7 @@ public class PaymentContext {
     private final PaymentDebitCardStrategy paymentDebitCardStrategy;
     private final PaymentCreditCardStrategy paymentCreditCardStrategy;
 
-    public String processPayment(Payment payment) {
+    public Payment processPayment(Payment payment) {
         buildStrategies();
 
         PaymentMethodEnum paymentMethod = PaymentMethodEnum.valueOf(payment.getPaymentMethod().name().toUpperCase());
