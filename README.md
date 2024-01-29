@@ -43,43 +43,32 @@ docker compose -f docker-compose.yml up -d --build
 
 Para rodar no **Kubernetes** siga as seguintes etapas:
 
-Instale o minikube de acordo com o manual oficial, e conforme o seu sistema operacional: https://minikube.sigs.k8s.io/docs/start/
-> Caso haja uma instalação do Docker Desktop, deve ser interrompida para não conflitar com o minikube
+#### Instale o Docker
 
-Após instalado, inicie o minikube no terminal cmd 
+> No Windows, instale o Docker Desktop de acordo com o [manual oficial](https://docs.docker.com/desktop/install/windows-install/) e [habilite o Kubernetes](https://docs.docker.com/desktop/kubernetes/)
+
+> No Linux, instale o docker engine de acordo com o [manual oficial](https://docs.docker.com/engine/install/) e [instale e configure o kubernetes](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
+
+> No Mac OS, instale o Docker Desktop de acordo com o [manual oficial](https://docs.docker.com/desktop/install/mac-install/) e [instale e habilite o kubernetes](https://docs.docker.com/desktop/kubernetes/)
+
+#### Rode a aplicação
+
+1º Aplique as configurações da aplicação no K8S estando na pasta do projeto
 ```shell
-minikube start
+kubectl -- apply -f .\k8s
 ```
+A inicialização deve levar de 5 a 10 minutos
 
-Aplique as configurações da aplicação no K8S estando na pasta do projeto
+2º Para abrir o swagger no navegador, obtenha o a porta de saída da aplicação através do comando:
+
 ```shell
-minikube kubectl -- apply -f .\k8s
+kubectl get service bluesburguer-api
 ```
+_Caso esteja rodando em alguma Cloud este comando será útil para obter o endereço externo da aplicação_
 
-Para conferir que tudo está rodando de acordo, execute o seguinte comando em um terminal para visualizar o dashboard em um navegador. A inicialização deve levar de 5 a 10 minutos:
+3º Após a utilização, caso deseje remover todas as configurações da aplicação, poderá executar:
 ```shell
-minikube dashboard
-```
-
-Para abrir o swagger no navegador utilize o comando 
-
-```shell
- minikube service bluesburguer-api
-```
-
-Para utilizar a API, execute o redirecionamento de portas no minikube, necessário para a utilização da API na máquina host:
-use
-```shell
- minikube kubectl get pods
-```
-Pegue o nome do pod da aplicação que foi gerado e troque onde esta escrito "nome-do-pod" rode o comando
-```shell
-minikube kubectl -- port-forward nome-do-pod 8181:8080
-```
-
-Após a utilização, caso deseje remover todas as configurações da aplicação, poderá executar:
-```shell
- minikube kubectl -- delete -f .\k8s\
+kubectl delete -f .\k8s\
 ```
 
 
