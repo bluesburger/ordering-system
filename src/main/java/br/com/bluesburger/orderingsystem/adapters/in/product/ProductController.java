@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.bluesburger.orderingsystem.adapters.in.product.dto.ProductCategory;
-import br.com.bluesburger.orderingsystem.core.domain.dto.ProductDto;
-import br.com.bluesburger.orderingsystem.core.domain.mapper.DessertMapper;
-import br.com.bluesburger.orderingsystem.core.domain.mapper.DishMapper;
-import br.com.bluesburger.orderingsystem.core.domain.mapper.DrinkMapper;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.request.ProductDto;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.mapper.DessertMapper;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.mapper.DishMapper;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.mapper.DrinkMapper;
 import br.com.bluesburger.orderingsystem.core.services.DessertService;
 import br.com.bluesburger.orderingsystem.core.services.DishService;
 import br.com.bluesburger.orderingsystem.core.services.DrinkService;

@@ -1,8 +1,5 @@
 package br.com.bluesburger.orderingsystem.adapters.in.menu.dto;
 
-import br.com.bluesburger.orderingsystem.core.domain.Dessert;
-import br.com.bluesburger.orderingsystem.core.domain.Dish;
-import br.com.bluesburger.orderingsystem.core.domain.Drink;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,11 +18,11 @@ public class MenuResponse implements Serializable {
     private static final long serialVersionUID = -814389075442231294L;
 
     @JsonProperty("dishes")
-    private List<Dish> dishes;
+    private List<DishResponse> dishes;
 
     @JsonProperty("drinks")
-    private List<Drink> drinks;
+    private List<DrinkResponse> drinks;
 
     @JsonProperty("desserts")
-    private List<Dessert> desserts;
+    private List<DessertResponse> desserts;
 }

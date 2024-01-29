@@ -9,8 +9,11 @@ import org.springframework.stereotype.Component;
 public class PaymentCreditCardStrategy implements PaymentStrategy {
 
     @Override
-    public String checkoutPayment(Payment payment) {
-        return String.format("Pagamento via cartão de crédito no valor de %.2f" +
+    public Payment checkoutPayment(Payment payment) {
+        var message = String.format("Pagamento via cartão de crédito no valor de %.2f" +
                 " foi realizado com sucesso e seu pedido está em preparação", payment.getTotalValue());
+
+        payment.updateMessagePayment(message);
+        return payment;
     }
 }

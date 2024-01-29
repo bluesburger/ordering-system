@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bluesburguer
+  labels:
+    app: bluesburguer
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bluesburguer
+  template:
+    metadata:
+      labels:
+        app: bluesburguer
+    spec:
+      containers:
+        - name: bluesburguer-api
+          image: fernandomqs/ordering-system:1.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOST   # Setting Database host address from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: host
+            - name: DB_NAME  # Setting Database name from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: dbName
+            - name: DB_USERNAME  # Setting Database username from Secret
+              valueFrom:
+                secretKeyRef:
+                  name: senhas
+                  key: username
+            - name: DB_PASSWORD # Setting Database password from Secret
+              valueFrom:
+                secretKeyRef:
+                  name: senhas
+                  key: password
+
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: SPRING_PROFILES_ACTIVE
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: SPRING_DATASOURCE_USERNAME
+#            - name: REDIS_HOST
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: dados
+#                  key: REDIS_HOST
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: senhas
+                  key: SPRING_DATASOURCE_PASSWORD
+          livenessProbe:
+            httpGet:
+              path: /swagger-ui/
+              port: 8080
+            initialDelaySeconds: 180
+            periodSeconds: 5
+#          readinessProbe:
+#            httpGet:
+#              port: 8080
+#              path: /swagger-ui/
+#            periodSeconds: 10
+#            failureThreshold: 5
+#            initialDelaySeconds: 180
+          resources:
+            requests:
+              cpu: 1000m

@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.bluesburger.orderingsystem.core.domain.Dish;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DishRepository;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.dish.entities.DishEntity;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.dish.DishRepository;
 
 @Service
 public class DishService {
@@ -15,15 +15,15 @@ public class DishService {
 	@Autowired
 	private DishRepository dishRepository;
 	
-	public List<Dish> listAll() {
+	public List<DishEntity> listAll() {
 		return dishRepository.findAll();
 	}
 	
-	public Optional<Dish> getById(Long id) {
+	public Optional<DishEntity> getById(Long id) {
 		return dishRepository.findById(id);
 	}
 	
-	public Optional<Dish> save(Dish dish) {
-		return Optional.of(dishRepository.save(dish));
+	public Optional<DishEntity> save(DishEntity dishEntity) {
+		return Optional.of(dishRepository.save(dishEntity));
 	}
 }

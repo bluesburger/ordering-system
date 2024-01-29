@@ -1,12 +1,12 @@
 package br.com.bluesburger.orderingsystem.core.services;
 
-import java.util.Objects;
-
+import br.com.bluesburger.orderingsystem.core.domain.User;
 import org.springframework.stereotype.Service;
 
-import br.com.bluesburger.orderingsystem.core.domain.User;
-import br.com.bluesburger.orderingsystem.core.ports.out.UserPort;
+import br.com.bluesburger.orderingsystem.ports.out.UserPort;
 import lombok.RequiredArgsConstructor;
+
+import static java.util.Objects.isNull;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +17,6 @@ public class UserService {
     public User validateUser(User user) {
         final var userRecovered = userPort.getUserByCpf(user.getCpf());
 
-        return Objects.isNull(userRecovered) ? userPort.saveUser(user) : userRecovered;
+        return isNull(userRecovered.getId()) ? userPort.saveUser(user) : userRecovered;
     }
 }

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dados
+data:
+  host: "mysql"
+  dbName: "dbbluesburger"
+#  MYSQL_USER: "admin"
+  SPRING_PROFILES_ACTIVE: "dev"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/dbbluesburger"
+  SPRING_DATASOURCE_USERNAME: "root"
+#  REDIS_HOST: "my-release-redis-master-0.my-release-redis-headless.default.svc.cluster.local"

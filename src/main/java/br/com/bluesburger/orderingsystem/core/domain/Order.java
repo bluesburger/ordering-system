@@ -1,160 +1,128 @@
 package br.com.bluesburger.orderingsystem.core.domain;
 
-import java.io.Serializable;
+import br.com.bluesburger.orderingsystem.adapters.out.exceptions.OrderSituationIllegal;
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-
-import lombok.NonNull;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import br.com.bluesburger.orderingsystem.adapters.out.exceptions.OrderSituationIllegal;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Entity(name = "orders")
-@Getter
-@Setter
+@Data
+@Builder
+@ToString
 @NoArgsConstructor
-public class Order implements Serializable {
+@AllArgsConstructor
+public class Order {
 
-	private static final long serialVersionUID = 4781858089323528412L;
+    private Long id;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@CreationTimestamp
-	private LocalDateTime createdTime;
-	
-	@UpdateTimestamp
-	private LocalDateTime updatedTime;
+    private LocalDateTime createdTime;
 
-	@NonNull
-	private BigDecimal totalValue;
+    private LocalDateTime updatedTime;
 
-	@Enumerated(EnumType.STRING)
-	private OrderStatus status = OrderStatus.PEDIDO_REALIZADO;
+    private BigDecimal totalValue;
 
-	@ManyToMany
-	private List<Dish> dishes = new ArrayList<>();
+    private OrderStatus status;
 
-	@ManyToMany
-	private List<Dessert> desserts = new ArrayList<>();
-	
-	@ManyToMany
-	private List<Drink> drinks = new ArrayList<>();
+    private List<OrderItemDish> dishes = new ArrayList<>();
 
-	@Convert(converter = CpfConverter.class)
-	@ManyToOne
-	@JsonIgnoreProperties("orders")
-	@JoinColumn(name = "user_id")
-	private User user;
+    private List<OrderItemDessert> desserts = new ArrayList<>();
 
-	public void add(Dish... newDishes) {
-		verifyIfCanModifyItems();
-		Stream.of(newDishes).forEach(dish -> dishes.add(dish));
-	}
-	
-	public void remove(Dish dish) {
-		verifyIfCanModifyItems();
-		dishes.remove(dish);
-	}
-	
-	public void add(Dessert... newDesserts) {
-		verifyIfCanModifyItems();
-		Stream.of(newDesserts).forEach(dish -> desserts.add(dish));
-	}
-	
-	public void remove(Dessert dessert) {
-		verifyIfCanModifyItems();
-		desserts.remove(dessert);
-	}
-	
-	public void add(Drink... newDrinks) {
-		verifyIfCanModifyItems();
-		Stream.of(newDrinks).forEach(dish -> drinks.add(dish));
-	}
-	
-	public void remove(Drink drink) {
-		verifyIfCanModifyItems();
-		drinks.remove(drink);
-	}
-	
-	private void verifyIfCanModifyItems() {
-		if (!OrderStatus.PEDIDO_REALIZADO.equals(this.status)) {
-			throw new OrderSituationIllegal();
-		}
-	}
-	
-	public void start() {
-		setStatusIfAllowed(OrderStatus.PREPARO_INICIADO);
-	}
-	
-	public void ready() {
-		setStatusIfAllowed(OrderStatus.PREPARO_PRONTO);
-	}
-	
-	public void complete() {
-		setStatusIfAllowed(OrderStatus.PEDIDO_ENTREGUE);
-	}
-	
-	private void setStatusIfAllowed(OrderStatus newStatus) {
-		switch (newStatus) {
-		case PEDIDO_REALIZADO:
-			currentStatusNeedsToBe(OrderStatus.PEDIDO_REALIZADO);
-			currentStatusISAlready(newStatus);
-			break;
-		case PREPARO_INICIADO:
-			currentStatusNeedsToBe(OrderStatus.PEDIDO_REALIZADO);
-			currentStatusISAlready(newStatus);
-			break;
-		case PREPARO_PRONTO:
-			currentStatusNeedsToBe(OrderStatus.PREPARO_INICIADO);
-			currentStatusISAlready(newStatus);
-			break;
-		case PEDIDO_ENTREGUE:
-			currentStatusNeedsToBe(OrderStatus.PREPARO_PRONTO);
-			currentStatusISAlready(newStatus);
-			break;
-		}
-		this.status = newStatus;
-	}
-	
-	/**
-	 * Verifica se status atual já se encontra na situação
-	 * @param target
-	 */
-	private void currentStatusISAlready(OrderStatus target) {
-		if (target.equals(this.status)) {
-			throw new OrderSituationIllegal();
-		}
-	}
-	
-	/**
-	 * Verifica se a reagra de status atual é equivalente ao esperado
-	 * @param target
-	 */
-	private void currentStatusNeedsToBe(OrderStatus target) {
-		if (!target.equals(this.status)) {
-			throw new OrderSituationIllegal();
-		}
-	}
+    private List<OrderItemDrink> drinks = new ArrayList<>();
+
+    private User user;
+
+    public void add(Dish... newDishes) {
+        verifyIfCanModifyItems();
+//        dishes.addAll(Arrays.asList(newDishes));
+    }
+
+    public void remove(Dish dish) {
+        verifyIfCanModifyItems();
+        dishes.remove(dish);
+    }
+
+    public void add(Dessert... newDessert) {
+        verifyIfCanModifyItems();
+//        desserts.addAll(Arrays.asList(newDessert));
+    }
+
+    public void remove(Dessert dessert) {
+        verifyIfCanModifyItems();
+        desserts.remove(dessert);
+    }
+
+    public void add(Drink... newDrinkEntities) {
+        verifyIfCanModifyItems();
+//        drinks.addAll(Arrays.asList(newDrinkEntities));
+    }
+
+    public void remove(Drink drink) {
+        verifyIfCanModifyItems();
+        drinks.remove(drink);
+    }
+
+    private void verifyIfCanModifyItems() {
+        if (!OrderStatus.PEDIDO_RECEBIDO.equals(this.status)) {
+            throw new OrderSituationIllegal();
+        }
+    }
+
+    public void start() {
+        setStatusIfAllowed(OrderStatus.PEDIDO_EM_PREPARACAO);
+    }
+
+    public void ready() {
+        setStatusIfAllowed(OrderStatus.PEDIDO_PRONTO);
+    }
+
+    public void complete() {
+        setStatusIfAllowed(OrderStatus.PEDIDO_FINALIZADO);
+    }
+
+    private void setStatusIfAllowed(OrderStatus newStatus) {
+        switch (newStatus) {
+            case PEDIDO_RECEBIDO:
+//                currentStatusNeedsToBe(OrderStatus.PEDIDO_REALIZADO);
+                currentStatusISAlready(newStatus);
+                break;
+            case PEDIDO_EM_PREPARACAO:
+//                currentStatusNeedsToBe(OrderStatus.PEDIDO_REALIZADO);
+                currentStatusISAlready(newStatus);
+                break;
+            case PEDIDO_PRONTO:
+//                currentStatusNeedsToBe(OrderStatus.PEDIDO_EM_PREPARACAO);
+                currentStatusISAlready(newStatus);
+                break;
+            case PEDIDO_FINALIZADO:
+//                currentStatusNeedsToBe(OrderStatus.PREPARO_PRONTO);
+                currentStatusISAlready(newStatus);
+                break;
+        }
+        this.status = newStatus;
+    }
+
+    /**
+     * Verifica se status atual já se encontra na situação
+     *
+     * @param target
+     */
+    private void currentStatusISAlready(OrderStatus target) {
+        if (target.equals(this.status)) {
+            throw new OrderSituationIllegal();
+        }
+    }
+
+    /**
+     * Verifica se a reagra de status atual é equivalente ao esperado
+     *
+     * @param target
+     */
+//    private void currentStatusNeedsToBe(OrderStatus target) {
+//        if (!target.equals(this.status)) {
+//            throw new OrderSituationIllegal();
+//        }
+//    }
 }

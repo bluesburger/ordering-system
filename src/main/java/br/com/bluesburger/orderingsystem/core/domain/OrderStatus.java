@@ -7,10 +7,10 @@ import lombok.Getter;
 
 @Getter
 public enum OrderStatus {
-	 PEDIDO_REALIZADO("Pedido Realizado"),
-	 PREPARO_INICIADO("Preparo Iniciado"),
-	 PREPARO_PRONTO("Pedido Pronto"),
-	 PEDIDO_ENTREGUE("Pedido Entregue");
+	 PEDIDO_RECEBIDO("Pedido Recebido"),
+	 PEDIDO_EM_PREPARACAO("Pedido em Preparação"),
+	 PEDIDO_PRONTO("Pedido Pronto"),
+	 PEDIDO_FINALIZADO("Pedido Finalizado");
 	
 	private String name;
 	

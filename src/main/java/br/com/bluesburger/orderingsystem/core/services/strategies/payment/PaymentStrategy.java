@@ -4,5 +4,5 @@ import br.com.bluesburger.orderingsystem.core.domain.Payment;
 
 public interface PaymentStrategy {
 
-    String checkoutPayment(Payment payment);
+    Payment checkoutPayment(Payment payment);
 }
