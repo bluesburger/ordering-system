@@ -46,12 +46,12 @@ Para rodar no **Kubernetes** siga as seguintes etapas:
 Instale o minikube de acordo com o manual oficial, e conforme o seu sistema operacional: https://minikube.sigs.k8s.io/docs/start/
 > Caso haja uma instalação do Docker Desktop, deve ser interrompida para não conflitar com o minikube
 
-Após instalado, inicie o minikube
+Após instalado, inicie o minikube no terminal cmd 
 ```shell
 minikube start
 ```
 
-Aplique as configurações da aplicação no K8S
+Aplique as configurações da aplicação no K8S estando na pasta do projeto
 ```shell
 minikube kubectl -- apply -f .\k8s
 ```
@@ -61,21 +61,17 @@ Para conferir que tudo está rodando de acordo, execute o seguinte comando em um
 minikube dashboard
 ```
 
-A instalação deve levar de 5 a 10 minutos para ficar pronta para utilização.
-Caso deseje acompanhar os logs da aplicação principal, execute o seguinte comando em um terminal:
-```shell
-minikube kubectl -- logs -f ordering-system-api
-```
+Para abrir o swagger no navegador utilize o comando 
 
-Para utilizar a API, execute o redirecionamento de portas no minikube, necessário para a utilização da API na máquina host:
 ```shell
-minikube kubectl -- port-forward ordering-system-api 8181:8080
+ minikube service bluesburguer-api
 ```
 
 Após a utilização, caso deseje remover todas as configurações da aplicação, poderá executar:
 ```shell
  minikube kubectl -- delete -f .\k8s\
 ```
+
 
 ## ☕ Usando ordering-system
 
