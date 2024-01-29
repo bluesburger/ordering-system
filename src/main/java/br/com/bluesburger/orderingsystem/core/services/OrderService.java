@@ -1,180 +1,230 @@
 package br.com.bluesburger.orderingsystem.core.services;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.transaction.Transactional;
-
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.request.DessertRequest;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.request.DishRequest;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.request.DrinkRequest;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.dish.OrderDishRepository;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.dish.entities.OrderItemDishEntity;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.dish.entities.DishEntity;
+import br.com.bluesburger.orderingsystem.adapters.out.repository.drink.entities.DrinkEntity;
+import br.com.bluesburger.orderingsystem.core.domain.*;
+import br.com.bluesburger.orderingsystem.ports.in.OrderProcessingServicePort;
+import br.com.bluesburger.orderingsystem.ports.out.DessertPort;
+import br.com.bluesburger.orderingsystem.ports.out.DishPort;
+import br.com.bluesburger.orderingsystem.ports.out.DrinkPort;
+import br.com.bluesburger.orderingsystem.ports.out.OrderPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DessertNotFoundException;
-import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DishNotFoundException;
-import br.com.bluesburger.orderingsystem.adapters.out.exceptions.DrinkNotFoundException;
-import br.com.bluesburger.orderingsystem.adapters.out.exceptions.OrderNotFoundException;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DessertRepository;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DishRepository;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DrinkRepository;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.OrderRepository;
-import br.com.bluesburger.orderingsystem.core.domain.Dessert;
-import br.com.bluesburger.orderingsystem.core.domain.Dish;
-import br.com.bluesburger.orderingsystem.core.domain.Drink;
-import br.com.bluesburger.orderingsystem.core.domain.Order;
-import br.com.bluesburger.orderingsystem.core.domain.OrderStatus;
-import br.com.bluesburger.orderingsystem.core.domain.User;
-import br.com.bluesburger.orderingsystem.core.domain.dto.DessertDto;
-import br.com.bluesburger.orderingsystem.core.domain.dto.DishDto;
-import br.com.bluesburger.orderingsystem.core.domain.dto.DrinkDto;
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class OrderService {
+public class OrderService implements OrderProcessingServicePort {
 
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderPort orderPort;
 
     @Autowired
-    private DishRepository dishRepository;
+    private DishPort dishPort;
 
     @Autowired
-    private DessertRepository dessertRepository;
+    private DessertPort dessertPort;
 
     @Autowired
-    private DrinkRepository drinkRepository;
+    private DrinkPort drinkPort;
 
     @Autowired
     private UserService userService;
 
-    public Optional<Order> getById(Long orderId) {
-        return orderRepository.findById(orderId);
-    }
+    public Order processOrder(Command command) {
 
-    public Order update(Order order) {
-        return orderRepository.save(order);
-    }
+        var userValidate = userService.validateUser(command.getUser());
 
-    public Order save(Order order) {
-        return orderRepository.save(order);
-    }
-
-    public List<Order> findAll() {
-        return orderRepository.findAll();
-    }
-
-    public List<Order> findAllByStatus(OrderStatus status) {
-        return orderRepository.findAllByStatus(status);
-    }
-
-    public Order createOrder(List<DishDto> dishesDto, List<DrinkDto> drinksDto, 
-    		List<DessertDto> dessertsDto, User user) {
         var order = new Order();
-        var userValidate = userService.validateUser(user);
         order.setUser(userValidate);
+        order.setStatus(OrderStatus.PEDIDO_RECEBIDO);
 
-        order.setStatus(OrderStatus.PEDIDO_REALIZADO);
-
-        var dishes = dishesDto.stream()
-                .map(DishDto::getId)
-                .map(dishRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        var dishes = command.getDishes().stream()
+                .map(this::completeDish)
+                .map(this::createOrderItemDish)
                 .collect(Collectors.toList());
         order.setDishes(dishes);
 
-        var drinks = drinksDto.stream()
-                .map(DrinkDto::getId)
-                .map(drinkRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        var drinks = command.getDrinks().stream()
+                .map(this::completeDrink)
+                .map(this::createOrderItemDrink)
                 .collect(Collectors.toList());
         order.setDrinks(drinks);
 
-        var desserts = dessertsDto.stream()
-                .map(DessertDto::getId)
-                .map(dessertRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        var desserts = command.getDesserts().stream()
+                .map(this::completeDessert)
+                .map(this::createOrderItemDessert)
                 .collect(Collectors.toList());
         order.setDesserts(desserts);
 
         final var totalValue = calculateTotalValueOrder(dishes, drinks, desserts);
+
         order.setTotalValue(totalValue);
 
         return save(order);
     }
 
-    private BigDecimal calculateTotalValueOrder(List<Dish> dishes, List<Drink> drinks, List<Dessert> desserts) {
-        final var totalValueDishes = dishes.stream()
-                .map(Dish::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+    private OrderItemDish createOrderItemDish(Dish dish) {
+        return OrderItemDish.builder()
+                .dish(dish)
+                .quantity(dish.getQuantity())
+                .totalAmount(dish.getPrice().multiply(new BigDecimal(dish.getQuantity())))
+                .build();
+    }
 
-        final var totalValueDrinks = drinks.stream()
-                .map(Drink::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+    private OrderItemDessert createOrderItemDessert(Dessert dessert) {
+        return OrderItemDessert.builder()
+                .dessert(dessert)
+                .quantity(dessert.getQuantity())
+                .totalAmount(dessert.getPrice().multiply(new BigDecimal(dessert.getQuantity())))
+                .build();
+    }
 
-        final var totalValueDesserts = desserts.stream()
-                .map(Dessert::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+    private OrderItemDrink createOrderItemDrink(Drink drink) {
+        return OrderItemDrink.builder()
+                .drink(drink)
+                .quantity(drink.getQuantity())
+                .totalAmount(drink.getPrice().multiply(new BigDecimal(drink.getQuantity())))
+                .build();
+    }
 
-        return List.of(totalValueDishes, totalValueDrinks, totalValueDesserts).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+    public Order getOrderById(Long orderId) {
+        return orderPort.findById(orderId);
     }
 
     public Order startOrder(Long orderId) {
-        var existantOrder = getById(orderId).orElseThrow(OrderNotFoundException::new);
+        var existantOrder = getOrderById(orderId);
         existantOrder.start();
         return save(existantOrder);
     }
 
     public Order setReadyOrder(Long orderId) {
-        var existantOrder = getById(orderId).orElseThrow(OrderNotFoundException::new);
+        var existantOrder = getOrderById(orderId);
         existantOrder.ready();
         return save(existantOrder);
     }
 
     public Order completeOrder(Long orderId) {
-        var existantOrder = getById(orderId).orElseThrow(OrderNotFoundException::new);
+        var existantOrder = getOrderById(orderId);
         existantOrder.complete();
         return save(existantOrder);
     }
 
-    public void addDrink(Long orderId, DrinkDto drinkDto) {
-        var existantOrder = getById(orderId).orElseThrow(OrderNotFoundException::new);
-        var drink = drinkRepository.findById(drinkDto.getId()).orElseThrow(DrinkNotFoundException::new);
-        existantOrder.add(drink);
-        save(existantOrder);
+    public List<Order> findAll() {
+        return orderPort.findAll();
     }
 
-    public void removeDrink(Long orderId, Long drinkId) {
-        var existantOrder = getById(orderId).orElseThrow(OrderNotFoundException::new);
-        var drink = drinkRepository.findById(drinkId).orElseThrow(DrinkNotFoundException::new);
-        existantOrder.remove(drink);
-        save(existantOrder);
+    public List<Order> findAllCustom() {
+        return orderPort.findAllCustom();
     }
 
-    public void addDish(Long orderId, DishDto drinkDto) {
-        var existantOrder = getById(orderId).orElseThrow(OrderNotFoundException::new);
-        var dish = dishRepository.findById(drinkDto.getId()).orElseThrow(DishNotFoundException::new);
+    public List<Order> findAllByStatus(OrderStatus status) {
+        return orderPort.findAllByStatus(status);
+    }
+
+    public void addDish(Long orderId, DishRequest drinkDto) {
+        var existantOrder = getOrderById(orderId);
+        var dish = dishPort.findById(drinkDto.getId());
         existantOrder.add(dish);
         save(existantOrder);
     }
 
     public void removeDish(Long orderId, Long dishId) {
-        var existantOrder = getById(orderId).orElseThrow(OrderNotFoundException::new);
-        var dish = dishRepository.findById(dishId).orElseThrow(DishNotFoundException::new);
+        var existantOrder = getOrderById(orderId);
+        var dish = dishPort.findById(dishId);
         existantOrder.remove(dish);
         save(existantOrder);
     }
 
-    public void addDessert(Long orderId, DessertDto dessertDto) {
-        var existantOrder = getById(orderId).orElseThrow(OrderNotFoundException::new);
-        var dessert = dessertRepository.findById(dessertDto.getId()).orElseThrow(DessertNotFoundException::new);
+    public void addDrink(Long orderId, DrinkRequest drinkRequest) {
+        var existantOrder = getOrderById(orderId);
+        var drink = drinkPort.findById(drinkRequest.getId());
+        existantOrder.add(drink);
+        save(existantOrder);
+    }
+
+    public void removeDrink(Long orderId, Long drinkId) {
+        var existantOrder = getOrderById(orderId);
+        var drink = drinkPort.findById(drinkId);
+        existantOrder.remove(drink);
+        save(existantOrder);
+    }
+
+    public void addDessert(Long orderId, DessertRequest dessertRequest) {
+        var existantOrder = getOrderById(orderId);
+        var dessert = dessertPort.findById(dessertRequest.getId());
         existantOrder.add(dessert);
         save(existantOrder);
     }
 
     public void removeDessert(Long orderId, Long dessertId) {
-        var existantOrder = getById(orderId).orElseThrow(OrderNotFoundException::new);
-        var dessert = dessertRepository.findById(dessertId).orElseThrow(DessertNotFoundException::new);
+        var existantOrder = getOrderById(orderId);
+        var dessert = dessertPort.findById(dessertId);
         existantOrder.remove(dessert);
         save(existantOrder);
+    }
+
+    private Order save(Order order) {
+        return orderPort.save(order);
+    }
+
+    private Dish completeDish(Dish dish) {
+        Dish dishRecovered = dishPort.findById(dish.getId());
+        dishRecovered.setQuantity(dish.getQuantity());
+
+        return dishRecovered;
+    }
+
+    private Drink completeDrink(Drink drink) {
+        Drink drinkRecovered = drinkPort.findById(drink.getId());
+        drinkRecovered.setQuantity(drink.getQuantity());
+
+        return drinkRecovered;
+    }
+
+    private Dessert completeDessert(Dessert dessert) {
+        Dessert dessertRecovered = dessertPort.findById(dessert.getId());
+        dessertRecovered.setQuantity(dessert.getQuantity());
+
+        return dessertRecovered;
+    }
+
+    private BigDecimal calculateTotalValueOrder(List<OrderItemDish> dishes, List<OrderItemDrink> drinks, List<OrderItemDessert> desserts) {
+        final var totalValueDishes = getTotalValueDishes(dishes);
+        final var totalValueDrinks = getTotalValueDrinks(drinks);
+        final var totalValueDesserts = getTotalValueDesserts(desserts);
+
+        return List.of(totalValueDishes, totalValueDrinks, totalValueDesserts).stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal getTotalValueDishes(List<OrderItemDish> dishesOrder) {
+        return dishesOrder.stream()
+                .map(dishItem -> dishItem.getDish().getPrice().multiply(new BigDecimal(dishItem.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal getTotalValueDrinks(List<OrderItemDrink> drinks) {
+        return drinks.stream()
+                .map(drink -> drink.getDrink().getPrice().multiply(new BigDecimal(drink.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal getTotalValueDesserts(List<OrderItemDessert> desserts) {
+        return desserts.stream()
+                .map(dessert -> dessert.getDessert().getPrice().multiply(new BigDecimal(dessert.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void update(Order order) {
+        orderPort.save(order);
     }
 }

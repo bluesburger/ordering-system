@@ -1,10 +1,10 @@
 package br.com.bluesburger.orderingsystem.core.services.strategies.menu;
 
+import br.com.bluesburger.orderingsystem.core.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import br.com.bluesburger.orderingsystem.core.domain.Menu;
-import br.com.bluesburger.orderingsystem.core.domain.User;
 
 @Component
 @RequiredArgsConstructor

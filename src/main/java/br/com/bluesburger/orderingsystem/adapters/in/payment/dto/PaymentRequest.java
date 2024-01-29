@@ -1,6 +1,6 @@
 package br.com.bluesburger.orderingsystem.adapters.in.payment.dto;
 
-import br.com.bluesburger.orderingsystem.core.domain.Order;
+import br.com.bluesburger.orderingsystem.adapters.in.order.dto.request.CommandRequest;
 import br.com.bluesburger.orderingsystem.core.services.strategies.payment.PaymentMethodEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,5 +25,5 @@ public class PaymentRequest {
     private PaymentMethodEnum paymentMethod;
 
     @JsonProperty(value = "order")
-    private Order order;
+    private CommandRequest order;
 }

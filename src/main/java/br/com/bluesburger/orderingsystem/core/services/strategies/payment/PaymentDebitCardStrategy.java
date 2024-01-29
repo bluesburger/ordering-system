@@ -13,22 +13,15 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class PaymentDebitCardStrategy implements PaymentStrategy {
 
-
     @Autowired
     private OrderService orderService;
 
     @Override
-    public String checkoutPayment(Payment payment) {
-        var order = payment.getOrder();
-
-        var recoveredOrder = orderService.getById(order.getId()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
-
-        recoveredOrder.setStatus(OrderStatus.PREPARO_INICIADO);
-        orderService.update(recoveredOrder);
-
-
-        return String.format("Pagamento via cartão de debito no valor de %.2f" +
+    public Payment checkoutPayment(Payment payment) {
+        var message = String.format("Pagamento via cartão de debito no valor de %.2f" +
                 " foi realizado com sucesso e seu pedido está em preparação", payment.getTotalValue());
+
+        payment.updateMessagePayment(message);
+        return payment;
     }
 }

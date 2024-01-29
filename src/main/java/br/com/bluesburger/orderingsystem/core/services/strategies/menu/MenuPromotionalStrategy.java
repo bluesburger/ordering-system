@@ -1,10 +1,10 @@
 package br.com.bluesburger.orderingsystem.core.services.strategies.menu;
 
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DessertRepository;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DishRepository;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DrinkRepository;
 import br.com.bluesburger.orderingsystem.core.domain.*;
-import br.com.bluesburger.orderingsystem.core.ports.out.OrderPort;
+import br.com.bluesburger.orderingsystem.ports.out.DessertPort;
+import br.com.bluesburger.orderingsystem.ports.out.DishPort;
+import br.com.bluesburger.orderingsystem.ports.out.DrinkPort;
+import br.com.bluesburger.orderingsystem.ports.out.OrderPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +18,16 @@ import static br.com.bluesburger.orderingsystem.core.domain.factory.MenuFactory.
 @Service
 public class MenuPromotionalStrategy implements MenuStrategy {
 
-    private final DishRepository dishRepository;
-    private final DrinkRepository drinkRepository;
-    private final DessertRepository dessertRepository;
+    private final DishPort dishPort;
+    private final DrinkPort drinkPort;
+    private final DessertPort dessertPort;
     private final OrderPort orderPort;
 
     @Override
     public Menu showMenu(User user) {
-        final var dishList = dishRepository.findAll();
-        final var drinkList = drinkRepository.findAll();
-        final var dessertList = dessertRepository.findAll();
+        final var dishList = dishPort.findAll();
+        final var drinkList = drinkPort.findAll();
+        final var dessertList = dessertPort.findAll();
 
         var menu = buildMenu(dishList, drinkList, dessertList);
         final var ordersUser = orderPort.getOrdersByUser(user);
@@ -38,8 +38,6 @@ public class MenuPromotionalStrategy implements MenuStrategy {
     }
 
     private void applyDiscounts(Menu menuDefault, List<Order> ordersUser) {
-
-
         applyDiscountDishes(menuDefault.getDishes(), ordersUser);
         applyDiscountDrinks(menuDefault.getDrinks(), ordersUser);
         applyDiscountDesserts(menuDefault.getDesserts(), ordersUser);
@@ -50,7 +48,7 @@ public class MenuPromotionalStrategy implements MenuStrategy {
                 .collect(Collectors.groupingBy(dish -> dish, Collectors.counting()));
 
         dishes.stream()
-                .filter(dishe -> countOrders.containsKey(dishe) && countOrders.get(dishe) > 10)
+                .filter(dish -> countOrders.containsKey(dish) && countOrders.get(dish) > 10)
                 .forEach(Dish::applyTenPercentDiscount);
     }
 

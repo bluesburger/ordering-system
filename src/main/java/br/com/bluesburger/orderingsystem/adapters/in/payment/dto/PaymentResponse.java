@@ -8,4 +8,8 @@ import lombok.Data;
 public class PaymentResponse {
 
     private String message;
+
+    private String status;
+
+    private String qrCode;
 }

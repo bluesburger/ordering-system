@@ -1,10 +1,10 @@
 package br.com.bluesburger.orderingsystem.core.services.strategies.menu;
 
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DessertRepository;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DishRepository;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.DrinkRepository;
 import br.com.bluesburger.orderingsystem.core.domain.Menu;
 import br.com.bluesburger.orderingsystem.core.domain.User;
+import br.com.bluesburger.orderingsystem.ports.out.DessertPort;
+import br.com.bluesburger.orderingsystem.ports.out.DishPort;
+import br.com.bluesburger.orderingsystem.ports.out.DrinkPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +14,15 @@ import static br.com.bluesburger.orderingsystem.core.domain.factory.MenuFactory.
 @Service
 public class MenuDefaultStrategy implements MenuStrategy {
 
-    private final DishRepository dishRepository;
-    private final DrinkRepository drinkRepository;
-    private final DessertRepository dessertRepository;
+    private final DishPort dishPort;
+    private final DrinkPort drinkPort;
+    private final DessertPort dessertPort;
 
     @Override
     public Menu showMenu(User user) {
-        final var dishList = dishRepository.findAll();
-        final var drinkList = drinkRepository.findAll();
-        final var dessertList = dessertRepository.findAll();
+        final var dishList = dishPort.findAll();
+        final var drinkList = drinkPort.findAll();
+        final var dessertList = dessertPort.findAll();
 
         return buildMenu(dishList, drinkList, dessertList);
     }

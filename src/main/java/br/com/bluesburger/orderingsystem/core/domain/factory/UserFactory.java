@@ -1,7 +1,6 @@
 package br.com.bluesburger.orderingsystem.core.domain.factory;
 
 import br.com.bluesburger.orderingsystem.core.domain.User;
-import br.com.bluesburger.orderingsystem.core.domain.valueobject.Cpf;
 
 import java.util.Map;
 
