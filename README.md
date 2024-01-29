@@ -67,6 +67,16 @@ Para abrir o swagger no navegador utilize o comando
  minikube service bluesburguer-api
 ```
 
+Para utilizar a API, execute o redirecionamento de portas no minikube, necessário para a utilização da API na máquina host:
+use
+```shell
+ minikube kubectl get pods
+```
+Pegue o nome do pod da aplicação que foi gerado e troque onde esta escrito "nome-do-pod" rode o comando
+```shell
+minikube kubectl -- port-forward nome-do-pod 8181:8080
+```
+
 Após a utilização, caso deseje remover todas as configurações da aplicação, poderá executar:
 ```shell
  minikube kubectl -- delete -f .\k8s\
