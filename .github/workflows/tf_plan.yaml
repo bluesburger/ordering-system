@@ -1,0 +1,89 @@
+name: Create Terraform Plan for RDS
+
+on:
+  pull_request:
+    paths:
+      - 'ordering-system-database-main'
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  plan-prod:
+    name: 'Terraform Plan for Production'
+    runs-on: ubuntu-latest
+    env:
+      TF_WORKING_DIR: 'ordering-system-database-main'
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color
+        continue-on-error: true
+
+      - name: Update GitHub Comment
+        if: github.event_name == 'pull_request'
+        run: |
+          # 1. Retrieve existing bot comments for the PR
+          comments=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
+
+          botCommentId=$(echo "$comments" | jq -r '.[] | select(.user.login == "github-actions[bot]" and .body | contains("Terraform Format and Style")) | .id')
+
+          # 2. Prepare format of the comment
+          output="#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+          <details><summary>Validation Output</summary>
+          \`\`\`\n
+          ${{ steps.validate.outputs.stdout }}
+          \`\`\`
+          </details>
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+          <details><summary>Show Plan</summary>
+          \`\`\`\n
+          ${{ steps.plan.outputs.stdout }}
+          \`\`\`
+          </details>
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.TF_WORKING_DIR }}\`, Workflow: \`${{ github.workflow }}\`*"
+
+          # 3. If we have a comment, update it, otherwise create a new one
+          if [ -n "$botCommentId" ]; then
+            curl -X PATCH -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d "{\"body\":\"$output\"}" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/comments/$botCommentId"
+          else
+            curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d "{\"body\":\"$output\"}" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments"
+          fi
