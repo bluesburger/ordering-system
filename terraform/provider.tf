@@ -17,8 +17,8 @@ terraform {
 
 provider "aws" {
   region     = var.regionDefault
-  access_key = var.access_key
-  secret_key = var.secret_key
+  access_key = data.github_actions_environment_secrets.aws_access_key_id
+  secret_key = data.github_actions_environment_secrets.aws_secret_access_key
 
   default_tags {
     tags = var.tags
