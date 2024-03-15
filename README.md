@@ -1,6 +1,6 @@
 # Ordering System
 
-> Sistema de pedidos de um totem de autoatendimento de um fastfood blues burger.
+> Sistema de pedidos de um totem de autoatendimento de um fastfood blues burger. 
 
 ### Ajustes e melhorias
 
