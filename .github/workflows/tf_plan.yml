@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   plan-prod:
-    name: 'Terraform infra'
+    name: 'Terraform Push Application Docker Image'
     runs-on: ubuntu-latest
     env:
       TF_WORKING_DIR: '.'
