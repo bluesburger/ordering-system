@@ -21,7 +21,7 @@ variable "rdsUser" {
 
 variable "rdsPass" {
   description = "Inserir senha do banco em secrets"
-  default     = "Root2024"
+  default     = data.github_actions_environment_secrets.aws_rsd_password
 }
 
 variable "tags" {
