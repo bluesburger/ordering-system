@@ -53,4 +53,4 @@ jobs:
 
       - name: Terraform Apply
         id: apply
-        run: terraform -chdir=terraform apply -auto-approve
+        run: terraform -chdir=terraform apply -replace="null_resource.push_image_to_ecr" -auto-approve
