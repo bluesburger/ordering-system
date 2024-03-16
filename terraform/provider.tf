@@ -16,9 +16,9 @@ terraform {
 }
 
 provider "aws" {
-  region     = var.TF_VAR_AWS_REGION
-  access_key = var.TF_VAR_AWS_ACCESS_KEY_ID
-  secret_key = var.TF_VAR_AWS_SECRET_ACCESS_KEY
+  region     = var.defaultRegion
+  access_key = var.accessKey
+  secret_key = var.secretKey
 
   default_tags {
     tags = var.tags

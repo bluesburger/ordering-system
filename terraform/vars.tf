@@ -10,23 +10,26 @@ variable "tags" {
   }
 }
 
-variable "TF_VAR_AWS_ACCESS_KEY_ID" {
+variable "accessKey" {
   description = "Access Key Id"
   type        = string
+  sensitive   = true
 }
 
-variable "AWS_SECRET_ACCESS_KEY" {
+variable "secretKey" {
   description = "Access Key Secret"
   type        = string
+  sensitive   = true
 }
 
-variable "AWS_REGION" {
+variable "defaultRegion" {
   description = "Aws Region"
-  default     = "us-east-1"
   type        = string
+  sensitive   = true
 }
 
-variable "AWS_ACCOUNT_ID" {
+variable "accountId" {
   description = "Aws Account Id"
   type        = string
+  sensitive   = true
 }

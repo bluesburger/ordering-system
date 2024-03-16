@@ -6,10 +6,12 @@ on:
       - 'develop'
 
 env:
-  TF_VAR_AWS_ACCESS_KEY_ID: ${{ secrets.TF_VAR_AWS_ACCESS_KEY_ID }}
-  TF_VAR_AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_VAR_AWS_SECRET_ACCESS_KEY }}
-  TF_VAR_AWS_REGION: ${{ secrets.TF_VAR_AWS_REGION }}
-  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_VAR_accessKey: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  TF_VAR_secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_VAR_defaultRegion: ${{ secrets.AWS_REGION }}
+  TF_VAR_accountId: ${{ secrets.AWS_ACCOUNT_ID }}
 
 permissions:
   pull-requests: write
@@ -18,6 +20,7 @@ jobs:
   plan-prod:
     name: 'Terraform Push Application Docker Image'
     runs-on: ubuntu-latest
+    # environment: 'leandro'
     env:
       TF_WORKING_DIR: '.'
 
@@ -40,16 +43,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: |
-          export AWS_SDK_LOAD_CONFIG=1
-          export TF_VAR_AWS_ACCESS_KEY_ID=$TF_VAR_AWS_ACCESS_KEY_ID
-          export TF_VAR_AWS_SECRET_ACCESS_KEY=$TF_VAR_AWS_SECRET_ACCESS_KEY
-          export TF_VAR_AWS_REGION=$TF_VAR_AWS_REGION
-          export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
-
-          echo $TF_VAR_AWS_ACCESS_KEY_ID
-          
-          terraform -chdir=terraform init
+        run: terraform -chdir=terraform init
 
       - name: Terraform Validate
         id: validate
