@@ -48,7 +48,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: TF_LOG=DEBUG terraform plan -no-color 
+        run: TF_LOG=DEBUG terraform -chdir=terraform plan -no-color -out "latest"
         continue-on-error: true
 
       - name: Terraform Apply
