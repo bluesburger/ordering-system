@@ -45,6 +45,8 @@ jobs:
           export TF_VAR_AWS_SECRET_ACCESS_KEY=$TF_VAR_AWS_SECRET_ACCESS_KEY
           export TF_VAR_AWS_REGION=$TF_VAR_AWS_REGION
           export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
+
+          echo $TF_VAR_AWS_ACCESS_KEY_ID
           
           terraform -chdir=terraform init
 
