@@ -10,7 +10,7 @@ variable "tags" {
   }
 }
 
-variable "AWS_ACCESS_KEY_ID" {
+variable "TF_VAR_AWS_ACCESS_KEY_ID" {
   description = "Access Key Id"
   type = string
 }
