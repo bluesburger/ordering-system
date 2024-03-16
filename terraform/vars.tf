@@ -11,21 +11,22 @@ variable "tags" {
 }
 
 variable "AWS_ACCESS_KEY_ID" {
-  default = ""
+  description = "Access Key Id"
   type = string
 }
 
 variable "AWS_SECRET_ACCESS_KEY" {
-  default = ""
+  description = "Access Key Secret"
   type = string
 }
 
 variable "AWS_REGION" {
+  description = "Aws Region"
   default = "us-east-1"
   type = string
 }
 
 variable "AWS_ACCOUNT_ID" {
-  default = ""
+  description = "Aws Account Id"
   type = string
 }
