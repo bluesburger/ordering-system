@@ -1,13 +1,13 @@
-### Ordering System
+# Ordering System
 
-> Sistema de pedidos de um totem de autoatendimento de um fastfood blues burger.
+> Sistema de pedidos de um totem de autoatendimento de um fastfood blues burger. 
 
 ### Ajustes e melhorias
 
 O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas nas seguintes tarefas:
 
-- [x] implementação de clean code
-- [x] implementaçao de kubernetes
+- [] Microserviços
+
 
 ## 💻 Pré-requisitos
 
@@ -39,7 +39,7 @@ docker compose -f docker-compose.yml up -d --build
 ```
 
 
-## <img src="https://github.com/kubernetes/kubernetes/raw/master/logo/logo.png" width="30"> Rodando o projeto no Kubernetes
+## <img src="https://skillicons.dev/icons?i=kubernetes" width="30"> Rodando o projeto no Kubernetes
 
 Para rodar no **Kubernetes** siga as seguintes etapas:
 
@@ -71,6 +71,36 @@ _Caso esteja rodando em alguma Cloud este comando será útil para obter o ender
 kubectl delete -f .\k8s\
 ```
 
+#### Subindo a infraestrutura na AWS com terraform
+
+# Configurando a Infraestrutura na AWS
+
+Processo de configuração da infraestrutura na AWS. Abaixo está um guia rápido para iniciar esse processo:
+
+#### 1. Criação de uma Conta na AWS
+- Se você ainda não possui uma conta na AWS, o primeiro passo é criar uma. Visite o [site da AWS](https://aws.amazon.com/) e siga as instruções para criar uma nova conta.
+
+#### 2. Acesso ao Console da AWS
+- Após criar uma conta, faça login no Console de Gerenciamento da AWS usando suas credenciais recém-criadas. Isso lhe dará acesso aos serviços e recursos da AWS.
+
+#### 3. Pegue suas credencias
+- Crie um usuario no IAM com as permições necessarias, configure nas secrets do github seu usuario e senha aws
+
+#### 4. Provisionamento dos Recursos
+- Acesse a aba actions e rode a pipeline na seguencia logica.
+- Execute o bucket S3
+- Execute o database
+- Execute a infra
+
+
+## Rodando no **Amazon Elastic Container Service** 
+1. Efetuar build da imagem utilizando o docker compose: `docker compose build`
+2. Efetuar push no repositório criado no Elastic Container Registry, através da infraestrutura criada no https://github.com/bluesburger/ordering-system-infra
+
+## Rodando localmente o **Terraform** para construir e subir a imagem para o AWS ECR 
+1. terraform -chdir=terraform plan
+2. terraform -chdir=terraform apply
+3. fornecer as credenciais solicitadas
 
 ## ☕ Usando ordering-system
 
