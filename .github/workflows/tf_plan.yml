@@ -1,0 +1,59 @@
+name: Terraform Push Docker Image to AWS ECR
+
+on:
+  push:
+    branches:
+      - '*'
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_VAR_accessKey: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  TF_VAR_secretKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_VAR_defaultRegion: ${{ secrets.AWS_REGION }}
+  TF_VAR_accountId: ${{ secrets.AWS_ACCOUNT_ID }}
+
+permissions:
+  pull-requests: write
+
+jobs:
+  plan-prod:
+    name: 'Terraform Push Application Docker Image'
+    runs-on: ubuntu-latest
+    # environment: 'leandro'
+    env:
+      TF_WORKING_DIR: '.'
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform -chdir=terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform -chdir=terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform -chdir=terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        run: TF_LOG=DEBUG terraform -chdir=terraform plan -replace="null_resource.push_image_to_ecr" -no-color -out "latest"
+        continue-on-error: true
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform -chdir=terraform apply -auto-approve "latest"
