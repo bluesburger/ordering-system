@@ -48,9 +48,9 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: TF_LOG=DEBUG terraform -chdir=terraform plan -no-color -out "latest"
+        run: TF_LOG=DEBUG terraform -chdir=terraform plan -replace="null_resource.push_image_to_ecr" -no-color -out "latest"
         continue-on-error: true
 
       - name: Terraform Apply
         id: apply
-        run: terraform -chdir=terraform apply -replace="null_resource.push_image_to_ecr" -auto-approve
+        run: terraform -chdir=terraform apply -auto-approve "latest"
