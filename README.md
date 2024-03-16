@@ -1,6 +1,6 @@
-### Ordering System
+# Ordering System
 
-> Sistema de pedidos de um totem de autoatendimento de um fastfood blues burger.
+> Sistema de pedidos de um totem de autoatendimento de um fastfood blues burger. 
 
 ### Ajustes e melhorias
 
@@ -39,7 +39,7 @@ docker compose -f docker-compose.yml up -d --build
 ```
 
 
-## <img src="https://github.com/kubernetes/kubernetes/raw/master/logo/logo.png" width="30"> Rodando o projeto no Kubernetes
+## <img src="https://skillicons.dev/icons?i=kubernetes" width="30"> Rodando o projeto no Kubernetes
 
 Para rodar no **Kubernetes** siga as seguintes etapas:
 
@@ -71,6 +71,15 @@ _Caso esteja rodando em alguma Cloud este comando será útil para obter o ender
 kubectl delete -f .\k8s\
 ```
 
+
+## Rodando no **Amazon Elastic Container Service** 
+1. Efetuar build da imagem utilizando o docker compose: `docker compose build`
+2. Efetuar push no repositório criado no Elastic Container Registry, através da infraestrutura criada no https://github.com/bluesburger/ordering-system-infra
+
+## Rodando localmente o **Terraform** para construir e subir a imagem para o AWS ECR 
+1. terraform -chdir=terraform plan
+2. terraform -chdir=terraform apply
+3. fornecer as credenciais solicitadas
 
 ## ☕ Usando ordering-system
 
