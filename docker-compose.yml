@@ -1,8 +1,8 @@
 version: '3.8'
 services:
-  dbmysql:
+  database:
     image: mysql:latest
-    container_name: bdbluesburger
+    container_name: bluesburger-database
     command: --skip-name-resolve --host-cache-size=0
     volumes:
       - db_data:/var/lib/mysql
@@ -12,6 +12,10 @@ services:
       MYSQL_DATABASE: bluesburger
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
     ports:
       - "3306:3306"
     expose:
@@ -24,22 +28,29 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: fernandomqs/ordering-system:2.1
-    container_name: application-java
+    image: 637423186279.dkr.ecr.us-east-1.amazonaws.com/ordering-system:latest
+    container_name: bluesburger-application
     ports:
       - "30000:8080"
     networks:
       - spring-boot-mysql-network
     depends_on:
-      - dbmysql
+      database:
+        condition: service_healthy
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - SPRING_DATASOURCE_URL=jdbc:mysql://dbmysql:3306/bluesburger
+      - SPRING_DATASOURCE_URL=jdbc:mysql://database:3306/bluesburger
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
     volumes:
       - db_app:/var/lib/app
     command: [ "java", "-jar", "/app/orderingsystem-0.0.1-SNAPSHOT.jar" ]
+    healthcheck:
+      test: curl --silent http://localhost:30000 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      interval: 1m
+      timeout: 3s
+      retries: 3
+      start_period: 1m
 
 networks:
   spring-boot-mysql-network:
