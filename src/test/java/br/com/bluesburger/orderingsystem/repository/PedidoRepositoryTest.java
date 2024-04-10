@@ -13,9 +13,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.validation.ObjectError;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,26 +45,9 @@ public class PedidoRepositoryTest {
 
     @Test
     void deveCadastrarPedido(){
-        // Arrange
-        OrderItemDishEntity dishEntity1 = mock(OrderItemDishEntity.class);
-        OrderItemDishEntity dishEntity2 = mock(OrderItemDishEntity.class);
+      var pedido = gerarPedido();
 
-        OrderItemDessertEntity dessertEntity1 = mock(OrderItemDessertEntity.class);
-        OrderItemDessertEntity dessertEntity2 = mock(OrderItemDessertEntity.class);
-
-        OrderItemDrinkEntity drinkEntity1 = mock(OrderItemDrinkEntity.class);
-        OrderItemDrinkEntity drinkEntity2 = mock(OrderItemDrinkEntity.class);
-
-        var pedido = OrderEntity.builder()
-                .id(1L)
-                .status(OrderStatus.PEDIDO_RECEBIDO)
-                .totalValue(BigDecimal.ZERO)
-                .dishEntities(List.of(dishEntity1, dishEntity2))
-                .dessertEntities(List.of(dessertEntity1, dessertEntity2))
-                .drinkEntities(List.of(drinkEntity1, drinkEntity2))
-                .build();
-
-      when(pedidoRepository.save(pedido)).thenReturn(pedido);
+      when(pedidoRepository.save(any(OrderEntity.class))).thenReturn(pedido);
 
       //ACT
       var pedidoArmazenado = pedidoRepository.save(pedido);
@@ -71,6 +57,66 @@ public class PedidoRepositoryTest {
                 .isNotNull()
                 .isEqualTo(pedido);
 
-        verify(pedidoRepository, times(1)).save(pedido);
+        verify(pedidoRepository, times(1)).save(any(OrderEntity.class));
+    }
+
+    @Test
+    void deveBuscarPedido() {
+        //Arrange
+        var pedido = gerarPedido();
+
+        when(pedidoRepository.findById(pedido.getId()))
+                .thenReturn(Optional.of(pedido));
+
+        //ACT
+        var pedidoArmazenadoOpcional = pedidoRepository.findById(pedido.getId());
+
+        //Assert
+        assertThat(pedidoArmazenadoOpcional)
+                .isPresent()
+                .containsSame(pedido);
+        pedidoArmazenadoOpcional.ifPresent(pedidoRecebido -> {
+            assertThat(pedidoRecebido.getId()).isEqualTo(pedido.getId());
+        });
+
+        verify(pedidoRepository, times(1)).findById(pedido.getId());
+    }
+
+    @Test
+    void deveRemoverPedido(){
+        //Arrange
+        var pedido = gerarPedido();
+        doNothing().when(pedidoRepository).deleteById(pedido.getId());
+
+        //ACT
+        pedidoRepository.deleteById(pedido.getId());
+
+        //Assert
+        verify(pedidoRepository, times(1)).deleteById(pedido.getId());
+    }
+
+
+
+    private OrderEntity gerarPedido(){
+
+        OrderItemDishEntity dishEntity1 = mock(OrderItemDishEntity.class);
+        OrderItemDishEntity dishEntity2 = mock(OrderItemDishEntity.class);
+
+        OrderItemDessertEntity dessertEntity1 = mock(OrderItemDessertEntity.class);
+        OrderItemDessertEntity dessertEntity2 = mock(OrderItemDessertEntity.class);
+
+        OrderItemDrinkEntity drinkEntity1 = mock(OrderItemDrinkEntity.class);
+        OrderItemDrinkEntity drinkEntity2 = mock(OrderItemDrinkEntity.class);
+
+        return OrderEntity.builder()
+                .id(1L)
+                .status(OrderStatus.PEDIDO_RECEBIDO)
+                .totalValue(BigDecimal.ZERO)
+                .dishEntities(List.of(dishEntity1, dishEntity2))
+                .dessertEntities(List.of(dessertEntity1, dessertEntity2))
+                .drinkEntities(List.of(drinkEntity1, drinkEntity2))
+                .createdTime(LocalDateTime.now())
+                .build();
     }
 }
+
