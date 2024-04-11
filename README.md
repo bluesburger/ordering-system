@@ -1,6 +1,6 @@
 # Ordering System
 
-![](.github\badges\jacoco.svg)
+![](.github/badges/jacoco.svg)
 
 > Sistema de pedidos de um totem de autoatendimento de um fastfood blues burger. 
 
