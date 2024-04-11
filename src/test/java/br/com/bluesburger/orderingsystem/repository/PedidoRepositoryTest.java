@@ -17,6 +17,7 @@ import org.springframework.validation.ObjectError;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,6 +46,7 @@ public class PedidoRepositoryTest {
 
     @Test
     void deveCadastrarPedido(){
+      //Arrange
       var pedido = gerarPedido();
 
       when(pedidoRepository.save(any(OrderEntity.class))).thenReturn(pedido);
@@ -58,6 +60,24 @@ public class PedidoRepositoryTest {
                 .isEqualTo(pedido);
 
         verify(pedidoRepository, times(1)).save(any(OrderEntity.class));
+    }
+
+    @Test
+    void deveListarPedidos(){
+        //Arrange
+        var pedido1 = gerarPedido();
+        var pedido2 = gerarPedido();
+        var listaPedidos = Arrays.asList(
+                pedido1,
+                pedido2);
+        when(pedidoRepository.findAll()).thenReturn(listaPedidos);
+        //ACT
+        var pedidoArmazenado = pedidoRepository.findAll();
+        //Assert
+        assertThat(pedidoArmazenado)
+                .hasSize(2)
+                .containsExactlyInAnyOrder(pedido1,pedido2);
+        verify(pedidoRepository, times(1)).findAll();
     }
 
     @Test
