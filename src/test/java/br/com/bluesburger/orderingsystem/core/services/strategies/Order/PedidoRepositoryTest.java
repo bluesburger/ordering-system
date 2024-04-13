@@ -1,4 +1,4 @@
-package br.com.bluesburger.orderingsystem.repository;
+package br.com.bluesburger.orderingsystem.core.services.strategies.Order;
 
 import br.com.bluesburger.orderingsystem.adapters.out.repository.dessert.entities.OrderItemDessertEntity;
 import br.com.bluesburger.orderingsystem.adapters.out.repository.dish.entities.OrderItemDishEntity;
@@ -7,27 +7,30 @@ import br.com.bluesburger.orderingsystem.adapters.out.repository.order.OrderPort
 import br.com.bluesburger.orderingsystem.adapters.out.repository.order.OrderRepository;
 import br.com.bluesburger.orderingsystem.adapters.out.repository.order.entities.OrderEntity;
 import br.com.bluesburger.orderingsystem.core.domain.OrderStatus;
-import br.com.bluesburger.orderingsystem.ports.out.OrderPort;
+import br.com.bluesburger.orderingsystem.core.services.objectsmother.OrderMother;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.validation.ObjectError;
 
+import static br.com.bluesburger.orderingsystem.core.services.objectsmother.OrderMother.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 
+
 public class PedidoRepositoryTest {
+
+
+    OrderMother orderMother = new OrderMother();
 
     @Mock
     private OrderRepository pedidoRepository;
@@ -47,7 +50,7 @@ public class PedidoRepositoryTest {
     @Test
     void deveCadastrarPedido(){
       //Arrange
-      var pedido = gerarPedido();
+      var pedido = orderMother.gerarPedido();
 
       when(pedidoRepository.save(any(OrderEntity.class))).thenReturn(pedido);
 
@@ -65,8 +68,8 @@ public class PedidoRepositoryTest {
     @Test
     void deveListarPedidos(){
         //Arrange
-        var pedido1 = gerarPedido();
-        var pedido2 = gerarPedido();
+        var pedido1 = orderMother.gerarPedido();
+        var pedido2 = orderMother.gerarPedido();
         var listaPedidos = Arrays.asList(
                 pedido1,
                 pedido2);
@@ -83,7 +86,7 @@ public class PedidoRepositoryTest {
     @Test
     void deveBuscarPedido() {
         //Arrange
-        var pedido = gerarPedido();
+        var pedido = orderMother.gerarPedido();
 
         when(pedidoRepository.findById(pedido.getId()))
                 .thenReturn(Optional.of(pedido));
@@ -105,7 +108,7 @@ public class PedidoRepositoryTest {
     @Test
     void deveRemoverPedido(){
         //Arrange
-        var pedido = gerarPedido();
+        var pedido = orderMother.gerarPedido();
         doNothing().when(pedidoRepository).deleteById(pedido.getId());
 
         //ACT
@@ -116,27 +119,5 @@ public class PedidoRepositoryTest {
     }
 
 
-
-    private OrderEntity gerarPedido(){
-
-        OrderItemDishEntity dishEntity1 = mock(OrderItemDishEntity.class);
-        OrderItemDishEntity dishEntity2 = mock(OrderItemDishEntity.class);
-
-        OrderItemDessertEntity dessertEntity1 = mock(OrderItemDessertEntity.class);
-        OrderItemDessertEntity dessertEntity2 = mock(OrderItemDessertEntity.class);
-
-        OrderItemDrinkEntity drinkEntity1 = mock(OrderItemDrinkEntity.class);
-        OrderItemDrinkEntity drinkEntity2 = mock(OrderItemDrinkEntity.class);
-
-        return OrderEntity.builder()
-                .id(1L)
-                .status(OrderStatus.PEDIDO_RECEBIDO)
-                .totalValue(BigDecimal.ZERO)
-                .dishEntities(List.of(dishEntity1, dishEntity2))
-                .dessertEntities(List.of(dessertEntity1, dessertEntity2))
-                .drinkEntities(List.of(drinkEntity1, drinkEntity2))
-                .createdTime(LocalDateTime.now())
-                .build();
-    }
 }
 

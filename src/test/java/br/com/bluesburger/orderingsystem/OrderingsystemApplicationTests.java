@@ -1,11 +1,14 @@
 package br.com.bluesburger.orderingsystem;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.springframework.boot.test.context.SpringBootTest;
 
-class pedidoTest {
+@SpringBootTest
+class OrderingsystemApplicationTests {
 
+    @Test
+    void contextLoads() {
+    }
 //    @Test
 //    void deveCadastrarPedido(){
 //      fail("teste não implemntado");
@@ -25,5 +28,4 @@ class pedidoTest {
 //    void deveListarOsPedidosEmProducao(){
 //        fail("teste não implemntado");
 //    }
-
 }

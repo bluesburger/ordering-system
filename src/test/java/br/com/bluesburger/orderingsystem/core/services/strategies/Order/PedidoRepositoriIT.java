@@ -1,4 +1,4 @@
-package br.com.bluesburger.orderingsystem.repository;
+package br.com.bluesburger.orderingsystem.core.services.strategies.Order;
 
 import br.com.bluesburger.orderingsystem.adapters.out.repository.dessert.entities.OrderItemDessertEntity;
 import br.com.bluesburger.orderingsystem.adapters.out.repository.dish.entities.OrderItemDishEntity;
@@ -45,7 +45,6 @@ public class PedidoRepositoriIT {
     }
 
     @Test
-    //@Sql("/data.sql")
     void deveRegistrarPedido(){
         //arrange
         var pedido = gerarPedido();
