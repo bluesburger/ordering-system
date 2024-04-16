@@ -1,12 +1,7 @@
 package br.com.bluesburger.orderingsystem.core.services.strategies.Order;
 
-import br.com.bluesburger.orderingsystem.adapters.out.repository.dessert.entities.OrderItemDessertEntity;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.dish.entities.OrderItemDishEntity;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.drink.entities.OrderItemDrinkEntity;
-import br.com.bluesburger.orderingsystem.adapters.out.repository.order.OrderPortImpl;
 import br.com.bluesburger.orderingsystem.adapters.out.repository.order.OrderRepository;
 import br.com.bluesburger.orderingsystem.adapters.out.repository.order.entities.OrderEntity;
-import br.com.bluesburger.orderingsystem.core.domain.OrderStatus;
 import br.com.bluesburger.orderingsystem.core.services.objectsmother.OrderMother;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,20 +9,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static br.com.bluesburger.orderingsystem.core.services.objectsmother.OrderMother.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 
 
-public class PedidoRepositoryTest {
+class PedidoRepositoryTest {
 
 
     OrderMother orderMother = new OrderMother();
@@ -98,9 +88,7 @@ public class PedidoRepositoryTest {
         assertThat(pedidoArmazenadoOpcional)
                 .isPresent()
                 .containsSame(pedido);
-        pedidoArmazenadoOpcional.ifPresent(pedidoRecebido -> {
-            assertThat(pedidoRecebido.getId()).isEqualTo(pedido.getId());
-        });
+        pedidoArmazenadoOpcional.ifPresent(pedidoRecebido -> assertThat(pedidoRecebido.getId()).isEqualTo(pedido.getId()));
 
         verify(pedidoRepository, times(1)).findById(pedido.getId());
     }
