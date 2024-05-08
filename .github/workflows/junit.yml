@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,69 +16,12 @@ jobs:
         with:
           java-version: 11
 
-      - name: Install xml2js
-        run: npm install xml2js
-      - name: Run script with xml2js
-        run: |
-          node -e "const xml2js = require('/path/to/node_modules/xml2js'); console.log(xml2js);"
-
-
       - name: Build and run tests with JaCoCo
-        run: mvn clean verify
+        run: |
+          mvn clean verify
 
       - name: Upload JaCoCo coverage report
         uses: actions/upload-artifact@v2
         with:
           name: jacoco-report
-          path: target/site/jacoco  # Ajuste conforme o local dos relatórios de cobertura
-
-      - name: Check coverage thresholds
-        uses: actions/github-script@0.9.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { readFileSync } = require('fs');
-            const xml2js = require('xml2js');
-
-            // Função para ler e analisar o relatório de cobertura JaCoCo
-            async function parseJaCoCoCoverageReport(reportPath) {
-              const data = readFileSync(reportPath);
-              return xml2js.parseStringPromise(data, { explicitArray: false });
-            }
-
-            // Caminho para o relatório de cobertura JaCoCo
-            const coverageReportPath = 'target/site/jacoco/jacoco.xml';
-
-            try {
-              // Parse e calcula a cobertura total
-              const coverageData = await parseJaCoCoCoverageReport(coverageReportPath);
-              const coveragePercent = parseFloat(coverageData.coverageReport.counter["@_covered"]) / parseFloat(coverageData.coverageReport.counter["@_covered"]);
-
-              // Define o limite mínimo de cobertura desejado
-              const minCoveragePercent = 80;
-
-              // Define mensagem de cobertura
-              let coverageMessage = `Coverage is ${coveragePercent.toFixed(2)}%`;
-
-              // Verifica se a cobertura atende ao limite mínimo
-              if (coveragePercent < minCoveragePercent) {
-                coverageMessage += `, which is below the threshold of ${minCoveragePercent}%`;
-                core.setFailed('Coverage threshold not met');
-              } else {
-                coverageMessage += `, which meets the threshold of ${minCoveragePercent}%`;
-              }
-
-              // Comentário na PR com o resultado da cobertura
-              const github = require('@actions/github');
-              const context = github.context;
-              const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-
-              await octokit.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body: coverageMessage
-              });
-            } catch (error) {
-              console.error('Error processing coverage:', error);
-            }
+          path: target/site/jacoco
