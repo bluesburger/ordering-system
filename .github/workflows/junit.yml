@@ -30,7 +30,9 @@ jobs:
         run: |
           # Parse coverage report and extract coverage percentage
           COVERAGE=$(sed -n 's/.*<counter.*type="LINE".*covered="\([0-9]*\)".*total="\([0-9]*\)".*/\1\/\2*100/p' target/site/jacoco/jacoco.xml | bc -l)
-      
+          
+          echo "Coverage values: $COVERAGE"
+          
           # Define threshold
           THRESHOLD=80
       
