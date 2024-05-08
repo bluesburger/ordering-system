@@ -1,9 +1,6 @@
 name: Measure coverage
 
-on:
-  pull_request:
-    branches:
-      - main  # Adapte conforme a sua branch principal
+on: workflow_dispatch
 
 jobs:
   build:
