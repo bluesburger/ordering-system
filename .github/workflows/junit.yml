@@ -18,6 +18,10 @@ jobs:
 
       - name: Install xml2js
         run: npm install xml2js
+      - name: Run script with xml2js
+        run: |
+          node -e "const xml2js = require('/path/to/node_modules/xml2js'); console.log(xml2js);"
+
 
       - name: Build and run tests with JaCoCo
         run: mvn clean verify
