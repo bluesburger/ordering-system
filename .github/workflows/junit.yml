@@ -29,15 +29,16 @@ jobs:
       - name: Check coverage thresholds
         run: |
           cat target/site/jacoco/jacoco.xml
-          COVERAGE=$(sed -n 's/.*<counter.*type="LINE".*covered="\([0-9]*\)".*total="\([0-9]*\)".*/\1\/\2*100/p' target/site/jacoco/jacoco.xml | bc -l)
-
-        echo "Coverage values: $COVERAGE"
-        
+          COVERAGE=$(sed -n 's/.*<counter.*type="LINE".*covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\1/gp' target/site/jacoco/jacoco.xml)
+          TOTAL_LINES=$(sed -n 's/.*<counter.*type="LINE".*covered="\([0-9]*\)".*missed="\([0-9]*\)".*/\2/gp' target/site/jacoco/jacoco.xml)
+          COVERAGE_PERCENT=$(echo "scale=2; $COVERAGE * 100 / ($COVERAGE + $TOTAL_LINES)" | bc -l)
           THRESHOLD=80
           
-          if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
-        echo "Error: Coverage is below threshold ($THRESHOLD%)"
-          exit 1
-          elif (( $(echo "$COVERAGE > $THRESHOLD" | bc -l) )); then
-          echo "Coverage is satisfactory"
+          echo "Coverage percent: $COVERAGE_PERCENT%"
+          
+          if (( $(echo "$COVERAGE_PERCENT < $THRESHOLD" | bc -l) )); then
+            echo "Error: Coverage is below threshold ($THRESHOLD%)"
+            exit 1
+          else
+            echo "Coverage is satisfactory"
           fi
