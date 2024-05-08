@@ -25,3 +25,30 @@ jobs:
         with:
           name: jacoco-report
           path: target/site/jacoco
+
+      - name: Check coverage thresholds
+        id: coverage-check
+        uses: actions/github-script@0.9.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const xml2js = require('xml2js');
+
+            async function parseJaCoCoCoverageReport(reportPath) {
+              const data = fs.readFileSync(reportPath);
+              const result = await xml2js.parseStringPromise(data);
+              const coveragePercent = parseFloat(result.coverageReport.counter['$'].covered) / parseFloat(result.coverageReport.counter['$'].missed + result.coverageReport.counter['$'].covered);
+
+              const minCoveragePercent = 1;
+              const coverageMessage = `Coverage is ${coveragePercent.toFixed(2)}%`;
+
+              if (coveragePercent < minCoveragePercent) {
+                console.log(`${coverageMessage}, which is below the threshold of ${minCoveragePercent}%`);
+                process.exit(1);
+              } else {
+                console.log(`${coverageMessage}, which meets the threshold of ${minCoveragePercent}%`);
+              }
+            }
+
+            await parseJaCoCoCoverageReport('target/site/jacoco/jacoco.xml');
