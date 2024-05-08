@@ -1,6 +1,7 @@
 name: Measure coverage
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,7 +26,6 @@ jobs:
           path: target/site/jacoco  # Ajuste conforme o local dos relatórios de cobertura
 
       - name: Check coverage thresholds
-        id: jacoco
         uses: actions/github-script@0.9.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -34,7 +34,7 @@ jobs:
             const xml2js = require('xml2js');
 
             // Função para ler e analisar o relatório de cobertura JaCoCo
-            function parseJaCoCoCoverageReport(reportPath) {
+            async function parseJaCoCoCoverageReport(reportPath) {
               const data = readFileSync(reportPath);
               return xml2js.parseStringPromise(data, { explicitArray: false });
             }
@@ -42,32 +42,36 @@ jobs:
             // Caminho para o relatório de cobertura JaCoCo
             const coverageReportPath = 'target/site/jacoco/jacoco.xml';
 
-            // Parse e calcula a cobertura total
-            const coverageData = await parseJaCoCoCoverageReport(coverageReportPath);
-            const coveragePercent = parseFloat(coverageData.coverageReport.counter["@_covered"]) / parseFloat(coverageData.coverageReport.counter["@_covered"]);
+            try {
+              // Parse e calcula a cobertura total
+              const coverageData = await parseJaCoCoCoverageReport(coverageReportPath);
+              const coveragePercent = parseFloat(coverageData.coverageReport.counter["@_covered"]) / parseFloat(coverageData.coverageReport.counter["@_covered"]);
 
-            // Define o limite mínimo de cobertura desejado
-            const minCoveragePercent = 80;
+              // Define o limite mínimo de cobertura desejado
+              const minCoveragePercent = 80;
 
-            // Define mensagem de cobertura
-            let coverageMessage = `Coverage is ${coveragePercent.toFixed(2)}%`;
+              // Define mensagem de cobertura
+              let coverageMessage = `Coverage is ${coveragePercent.toFixed(2)}%`;
 
-            // Verifica se a cobertura atende ao limite mínimo
-            if (coveragePercent < minCoveragePercent) {
-              coverageMessage += `, which is below the threshold of ${minCoveragePercent}%`;
-              core.setFailed('Coverage threshold not met');
-            } else {
-              coverageMessage += `, which meets the threshold of ${minCoveragePercent}%`;
+              // Verifica se a cobertura atende ao limite mínimo
+              if (coveragePercent < minCoveragePercent) {
+                coverageMessage += `, which is below the threshold of ${minCoveragePercent}%`;
+                core.setFailed('Coverage threshold not met');
+              } else {
+                coverageMessage += `, which meets the threshold of ${minCoveragePercent}%`;
+              }
+
+              // Comentário na PR com o resultado da cobertura
+              const github = require('@actions/github');
+              const context = github.context;
+              const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+
+              await octokit.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: coverageMessage
+              });
+            } catch (error) {
+              console.error('Error processing coverage:', error);
             }
-
-            // Comentário na PR com o resultado da cobertura
-            const github = require('@actions/github');
-            const context = github.context;
-            const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-
-            await octokit.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: coverageMessage
-            });
