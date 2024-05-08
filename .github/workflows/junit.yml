@@ -16,6 +16,9 @@ jobs:
         with:
           java-version: 11
 
+      - name: Install xml2js
+        run: npm install xml2js
+
       - name: Build and run tests with JaCoCo
         run: mvn clean verify
 
