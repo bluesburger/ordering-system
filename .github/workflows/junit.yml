@@ -28,18 +28,18 @@ jobs:
 
       - name: Check coverage thresholds
         run: |
-          # Parse coverage report and extract coverage percentage
+          cat target/site/jacoco/jacoco.xml
           COVERAGE=$(sed -n 's/.*<counter.*type="LINE".*covered="\([0-9]*\)".*total="\([0-9]*\)".*/\1\/\2*100/p' target/site/jacoco/jacoco.xml | bc -l)
-          
-          echo "Coverage values: $COVERAGE"
-          
-          # Define threshold
+
+        echo "Coverage values: $COVERAGE"
+        
+        # Define threshold
           THRESHOLD=80
-      
+          
           # Check if coverage is below threshold
           if (( $(echo "$COVERAGE < $THRESHOLD" | bc -l) )); then
-            echo "Error: Coverage is below threshold ($THRESHOLD%)"
-            exit 1
-          else if (( $(echo "$COVERAGE > $THRESHOLD" | bc -l) )) then
-            echo "Coverage is satisfactory"
+        echo "Error: Coverage is below threshold ($THRESHOLD%)"
+          exit 1
+          elif (( $(echo "$COVERAGE > $THRESHOLD" | bc -l) )); then
+          echo "Coverage is satisfactory"
           fi
