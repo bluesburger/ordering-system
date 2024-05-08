@@ -30,8 +30,8 @@ jobs:
         run: |
           # Parse coverage report and check coverage percentage
           COVERAGE=$(sed -n 's/.*<line.*total="\(.*\)".*/\1/p' target/site/jacoco/jacoco.xml)
-          if (( $(echo "$COVERAGE < 1" | bc -l) )); then
-            echo "Error: Coverage is below threshold (1%)"
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "Error: Coverage is below threshold (80%)"
             exit 1
           else
             echo "Coverage is satisfactory"
